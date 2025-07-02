@@ -16,16 +16,16 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Figtree&display=swap'>
-    <link rel='stylesheet' type='text/css' href='style.css?r=3'>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel='stylesheet' type='text/css' href='style.css?r=4'>
 </head>
 
-<body style='text-align: center; padding-top: 0px; background-color: #ffe695;'>
-    <h1 style="font-size: 7em;">benchmark saturation</h1>
+<body style='text-align: center; padding-top: 0px; background-color: #eee;'>
+    <h1 style="font-size: 6.45em; font-weight: bold; color: #2c3e50;">benchmark saturation</h1>
 
     <div style="width: 1140px; margin-left: auto; margin-right: auto;">
         <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 20px; margin-top: -45px; background-color: #000;">
+            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: -45px; background-color: #2c3e50;">
         </div>
 
         <br><br>
@@ -53,9 +53,10 @@
         </div>
 
         <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 20px; margin-top: 45px; background-color: #000;">
+            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
         </div>
         <br><br>
+
 
         <div style="font-size: 2.1em;">
             Saturation is when
@@ -70,6 +71,34 @@
             </select>
             .
         </div>
+        <br><br>
+
+        <style>
+            #task_saturation td:nth-child(1) {
+        		font-weight: bold;
+                text-align: left;
+            }
+            /* other cells */
+            #task_saturation td:not(:nth-child(1)) {
+                width: 18%;
+                cursor: pointer;
+                text-align: right;
+                padding-right: 5pt;
+            }
+            .canvasjs-chart-credit {
+                display: none;
+            }
+        </style>
+        <table id="task_saturation" style="margin-left: auto; margin-right: auto;"></table>
+
+            
+        <div id="chart_container" style="margin-top: 20px; margin-left: auto; margin-right: auto; width: 800px;"></div>
+
+        <div
+            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
+        </div>
+        <br><br>
+
 
 
         <div>
@@ -78,7 +107,7 @@
 
 
         <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 20px; margin-top: 45px; background-color: #000;">
+            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
         </div>
         <br><br>
 
@@ -92,7 +121,7 @@
 
 
         <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 20px; margin-top: 45px; background-color: #000;">
+            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
         </div>
         <br><br>
 
@@ -106,7 +135,7 @@
 
 
         <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 20px; margin-top: 45px; background-color: #000;">
+            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
         </div>
         <br><br>
 
@@ -124,6 +153,7 @@
         var randomNum = String((Math.floor(Math.random() * 10e10)));
         document.getElementById('nocachescript').src = "web-source.js?t=" + randomNum;
     </script>
+    <script src="https://cdn.canvasjs.com/ga/jquery.canvasjs.min.js"></script>
 </body>
 
 </htm22
