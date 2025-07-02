@@ -137,7 +137,7 @@ function fake_graph(title: string, saturation: number) {
       markerType: "square",
       xValueFormatString: "YYYY",
       color: "#F08080",
-      yValueFormatString: "#,##",
+      yValueFormatString: "#.##",
       dataPoints: [
         { x: new Date(2011, 1, 1), y: 0.63 },
         { x: new Date(2012, 1, 1), y: 0.69 },
@@ -161,7 +161,7 @@ function fake_graph(title: string, saturation: number) {
       showInLegend: true,
       name: "Avg Performance",
       lineDashType: "dash",
-      yValueFormatString: "#,##",
+      yValueFormatString: "#.##",
       dataPoints: [
         { x: new Date(2011, 1, 1), y: 0.53 },
         { x: new Date(2012, 1, 1), y: 0.54 },
