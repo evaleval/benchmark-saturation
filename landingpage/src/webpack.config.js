@@ -7,6 +7,10 @@ module.exports = (env, argv) => {
       module: {
          rules: [
             {
+               test: /\.css$/,
+               use: ['style-loader', 'css-loader'], // Applies loaders from right to left
+             },
+            {
                test: /\.tsx?$/,
                use: 'ts-loader',
                exclude: /node_modules/
