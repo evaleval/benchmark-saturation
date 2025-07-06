@@ -1,100 +1,130 @@
 export const DATA_SATURATION = {
-    "Translation": {
-      "WMT20": 0.9,
-      "WMT21": 0.85,
-      "WMT22": 0.8,
-      "WMT23": 0.8,
-      "WMT24": 0.77,
-    },
-    "Summarization": {
-      "SummEval": 1.0,
-      "MyEval": 0.7,
-      "BookSum": 1.0,
-      "ScisummNet": 0.95,
-      "LongSum": 0.3,
-    },
-    "Open-Ended": {
-      "HellaSwag": 0.6,
-      "OpenBookQA": 0.45,
-      "ARC": 0.6,
-      "MMLU": 0.85,
-      "Winogrande": 0.9,
-    },
-    "Closed-Ended": {
-      "TriviaQA": 1.0,
-      "NaturalQuest.": 0.99,
-      "HotpotQA": 1.0,
-      "WebQuestions": 0.99,
-      "SearchQA": 0.99,
-    },
-    "Reasoning": {
-      "ARC": 0.6,
-      "HellaSwag": 0.6,
-      "OpenBookQA": 0.45,
-      "MMLU": 0.85,
-      "Winogrande": 0.9,
-    },
-    "Retrieval": {
-      "MS MARCO": 0.95,
-      "TREC": 0.9,
-      "NQ": 0.99,
-      "HotpotQA": 1.0,
-      "TriviaQA": 1.0,
-    },
-    "Classification": {
-      "AG News": 0.95,
-      "SST-2": 0.9,
-      "IMDB": 0.85,
-      "Yelp": 0.8,
-      "TREC": 0.9,
-    },
-    "Generation": {
-      "WikiText-2": 0.9,
-      "LAMBADA": 0.85,
-      "Text8": 0.8,
-      "PTB": 0.75,
-      "Penn Treebank": 0.7,
-    },
-    "Vision": {
-      "ImageNet": 0.95,
-      "CIFAR-10": 0.9,
-      "CIFAR-100": 0.85,
-      "MNIST": 0.8,
-      "FashionMNIST": 0.75,
-    },
-    "Audio": {
-      "LibriSpeech": 0.95,
-      "CommonVoice": 0.9,
-      "VoxCeleb": 0.85,
-      "Urban8K": 0.8,
-      "ESC-50": 0.75,
-    },
-    "Multimodal": {
-      "VQA": 0.9,
-      "MS COCO": 0.85,
-      "Flickr30k": 0.8,
-      "Visual Genome": 0.75,
-      "CLEVR": 0.7,
-    },
-    "Time Series": {
-      "UCR Archive": 0.95,
-      "ECG5000": 0.9,
-      "ElectricDevices": 0.85,
-      "FaceDetection": 0.8,
-      "GesturePhase": 0.75,
-    },
-    "Graph": {
-      "Cora": 0.9,
-      "Citeseer": 0.85,
-      "Pubmed": 0.8,
-      "Reddit": 0.75,
-      "Amazon": 0.7,
-    },
-    "Tabular": {
-      "Adult": 0.95,
-      "IncomeCens": 0.9,
-      "Card Fraud": 0.85,
-      "Titanic": 0.8,
-      "House Prices": 0.75,
+  "Translation": {
+    "WMT20": { saturation: 0.9, year: 2020, public: true, size: 100 },
+    "WMT21": { saturation: 0.85, year: 2021, public: true, size: 120 },
+    "WMT22": { saturation: 0.8, year: 2022, public: true, size: 150 },
+    "WMT23": { saturation: 0.8, year: 2023, public: true, size: 130 },
+    "WMT24": { saturation: 0.77, year: 2024, public: true, size: 140 },
+  },
+  "Summarization": {
+    "SummEval": { saturation: 1.0, year: 2020, public: true, size: 50 },
+    "MyEval": { saturation: 0.7, year: 2021, public: false, size: 30 },
+    "BookSum": { saturation: 1.0, year: 2022, public: true, size: 60 },
+    "ScisummNet": { saturation: 0.95, year: 2021, public: true, size: 70 },
+    "LongSum": { saturation: 0.3, year: 2023, public: false, size: 20 },
+  },
+  "Open-Ended": {
+    "HellaSwag": { saturation: 0.6, year: 2019, public: true, size: 40 },
+    "OpenBookQA": { saturation: 0.45, year: 2020, public: true, size: 50 },
+    "ARC": { saturation: 0.6, year: 2021, public: true, size: 30 },
+    "MMLU": { saturation: 0.85, year: 2022, public: true, size: 80 },
+    "Winogrande": { saturation: 0.9, year: 2023, public: true, size: 90 },
+  },
+  "Closed-Ended": {
+    "TriviaQA": { saturation: 1.0, year: 2019, public: true, size: 100 },
+    "NaturalQuest": { saturation: 0.99, year: 2020, public: true, size: 110 },
+    "HotpotQA": { saturation: 1.0, year: 2019, public: true, size: 120 },
+    "WebQuestions": { saturation: 0.99, year: 2021, public: true, size: 90 },
+    "SearchQA": { saturation: 0.99, year: 2022, public: true, size: 80 },
+  },
+  "Reasoning": {
+    "ARC": { saturation: 0.6, year: 2021, public: true, size: 30 },
+    "HellaSwag": { saturation: 0.6, year: 2019, public: true, size: 40 },
+    "OpenBookQA": { saturation: 0.45, year: 2020, public: true, size: 50 },
+    "MMLU": { saturation: 0.85, year: 2022, public: true, size: 80 },
+    "Winogrande": { saturation: 0.9, year: 2023, public: true, size: 90 },
+  },
+  "Retrieval": {
+    "MS MARCO": { saturation: 0.95, year: 2019, public: true, size: 200 },
+    "TREC": { saturation: 0.9, year: 2020, public: true, size: 150 },
+    "NQ": { saturation: 0.99, year: 2021, public: true, size: 180 },
+    "HotpotQA": { saturation: 1.0, year: 2019, public: true, size: 120 },
+    "TriviaQA": { saturation: 1.0, year: 2019, public: true, size: 100 },
+  },
+  "Classification": {
+    "AG News": { saturation: 0.95, year: 2018, public: true, size: 50 },
+    "SST-2": { saturation: 0.9, year: 2019, public: true, size: 40 },
+    "IMDB": { saturation: 0.85, year: 2018, public: true, size: 60 },
+    "Yelp": { saturation: 0.8, year: 2019, public: true, size: 70 },
+    "TREC": { saturation: 0.9, year: 2020, public: true, size: 80 },
+  },
+  "Generation": {
+    "WikiText-2": { saturation: 0.9, year: 2019, public: true, size: 100 },
+    "LAMBADA": { saturation: 0.85, year: 2018, public: true, size: 50 },
+    "Text8": { saturation: 0.8, year: 2018, public: true, size: 60 },
+    "PTB": { saturation: 0.75, year: 2019, public: true, size: 70 },
+    "Penn Treebank": { saturation: 0.7, year: 2018, public: true, size: 80 },
+  },
+  "Vision": {
+    "ImageNet": { saturation: 0.95, year: 2012, public: true, size: 500 },
+    "CIFAR-10": { saturation: 0.9, year: 2016, public: true, size: 60 },
+    "CIFAR-100": { saturation: 0.85, year: 2016, public: true, size: 70 },
+    "MNIST": { saturation: 0.8, year: 1998, public: true, size: 100 },
+    "FashionMNIST": { saturation: 0.75, year: 2018, public: true, size: 80 },
+  },
+  "Audio": {
+    "LibriSpeech": { saturation: 0.95, year: 2018, public: true, size: 200 },
+    "CommonVoice": { saturation: 0.9, year: 2017, public: true, size: 150 },
+    "VoxCeleb": { saturation: 0.85, year: 2018, public: true, size: 100 },
+    "Urban8K": { saturation: 0.8, year: 2019, public: true, size: 50 },
+    "ESC-50": { saturation: 0.75, year: 2017, public: true, size: 40 },
+  },
+  "Multimodal": {
+    "VQA": { saturation: 0.9, year: 2015, public: true, size: 120 },
+    "MS COCO": { saturation: 0.85, year: 2014, public: true, size: 200 },
+    "Flickr30k": { saturation: 0.8, year: 2014, public: true, size: 90 },
+    "Visual Genome": { saturation: 0.75, year: 2017, public: true, size: 80 },
+    "CLEVR": { saturation: 0.7, year: 2017, public: true, size: 70 },
+  },
+  "Time Series": {
+    "UCR Archive": { saturation: 0.95, year: 2015, public: true, size: 150 },
+    "ECG5000": { saturation: 0.9, year: 2017, public: true, size: 80 },
+    "ElectricDevices": { saturation: 0.85, year: 2018, public: true, size: 60 },
+    "FaceDetection": { saturation: 0.8, year: 2019, public: true, size: 70 },
+    "GesturePhase": { saturation: 0.75, year: 2020, public: true, size: 50 },
+  },
+  "Graph": {
+    "Cora": { saturation: 0.9, year: 2007, public: true, size: 40 },
+    "Citeseer": { saturation: 0.85, year: 2007, public: true, size: 30 },
+    "Pubmed": { saturation: 0.8, year: 2007, public: true, size: 50 },
+    "Reddit": { saturation: 0.75, year: 2015, public: true, size: 60 },
+    "Amazon": { saturation: 0.7, year: 2018, public: true, size: 70 },
+  },
+  "Tabular": {
+    "Adult": { saturation: 0.95, year: 1996, public: true, size: 100 },
+    "IncomeCens": { saturation: 0.9, year: 1998, public: true, size: 80 },
+    "Card Fraud": { saturation: 0.85, year: 2019, public: true, size: 50 },
+    "Titanic": { saturation: 0.8, year: 1912, public: true, size: 60 },
+    "House Prices": { saturation: 0.75, year: 2016, public: true, size: 70 },
+  }
+}
+
+export function getVectorizedDataSaturation(DATA_SATURATION) {
+  // task to vector
+  let taskToVector = {}
+  Object.keys(DATA_SATURATION).forEach((task, index) => {
+    // 1-hot encoded
+    taskToVector[task] = Array(14).fill(0);
+    taskToVector[task][index] = 1;
+  });
+
+  // [Task type (0/1 encoded), saturation, year, public (0/1), size]
+  let vectorizedData = [];
+  for (const [task, datasets] of Object.entries(DATA_SATURATION)) {
+    for (const dataset of Object.keys(datasets)) {
+      const data = datasets[dataset];
+      vectorizedData.push({
+        "name": dataset,
+        "vector": [
+          ...taskToVector[task],
+          data.saturation,
+          data.year,
+          data.public ? 1 : 0,
+          data.size
+        ]
+      });
     }
   }
+
+  return vectorizedData;
+}

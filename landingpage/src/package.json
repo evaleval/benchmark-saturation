@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "billboard.js": "^3.16.0",
-        "jquery": "^3.7.1"
+        "jquery": "^3.7.1",
+        "ml-pca": "^4.1.1"
     }
 }
