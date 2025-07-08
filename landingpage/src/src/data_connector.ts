@@ -115,6 +115,8 @@ export function getVectorizedDataSaturation(DATA_SATURATION) {
       const data = datasets[dataset];
       vectorizedData.push({
         "name": dataset,
+        "task": task,
+        "saturation": data.saturation,
         "vector": [
           ...taskToVector[task],
           data.saturation,
