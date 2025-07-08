@@ -205,3 +205,25 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Benchmark data (adjust if tracking via DVC)
+data/cache/
+# data/raw/
+# data/processed/
+
+# Result outputs
+results/*.csv
+results/*.json
+results/*.jsonl
+results/*.parquet
+results/*.feather
+
+# Node dependencies and build artifacts for website
+website/node_modules/
+website/.next/
+website/out/
+website/.turbo/
