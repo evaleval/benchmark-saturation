@@ -1,0 +1,30 @@
+{
+    "main": "webpack.config.js",
+    "devDependencies": {
+        "@types/jquery": "^3.5.32",
+        "css-loader": "^7.1.2",
+        "style-loader": "^4.0.0",
+        "ts-loader": "^9",
+        "typescript": "^4.5",
+        "webpack": "^5.99.9",
+        "webpack-cli": "^4.10.0",
+        "webpack-dev-server": "^4.15.2"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --mode=production",
+        "build_dev": "webpack --mode=development",
+        "watch": "webpack --mode=development --watch ",
+        "dev": "webpack-dev-server --mode=development --open",
+        "dev_prod": "webpack-dev-server --mode=production --open"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zouharvi/benchmark-saturation-visualization"
+    },
+    "dependencies": {
+        "billboard.js": "^3.16.0",
+        "jquery": "^3.7.1",
+        "ml-pca": "^4.1.1"
+    }
+}
