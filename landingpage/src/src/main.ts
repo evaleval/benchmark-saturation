@@ -80,12 +80,18 @@ function redo_task_saturation(data_saturation) {
       columns: [
         // take first two dimensions
         ["dataset_x", ...data_saturation_new.map(d => d[0])],
-        ["dataset", ...data_saturation_new.map(d => d[2])],
+        ["dataset", ...data_saturation_new.map(d => d[1])],
       ],
-      // labels: false,
+      onclick: function (d) {
+        const data_point = data_saturation_vec[d.index];
+        fake_year_saturation(`${data_point.task} / ${data_point.name}`, data_point.saturation)
+      },
     },
     tooltip: {
-      show: false  // <--- disables hover tooltips
+      contents: function (d) {
+        const data_point = data_saturation_vec[d[0].index];
+        return `${data_point.task} / ${data_point.name}`;
+      }
     },
     axis: {
       x: {
