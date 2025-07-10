@@ -18,6 +18,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel='stylesheet' type='text/css' href='style.css?r=4'>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
 </head>
 
 <body style='text-align: center; padding-top: 0px; background-color: #eee;'>
@@ -58,39 +59,50 @@
         <br><br>
 
 
-        <div style="font-size: 2.1em;">
-            Saturation is when
-            <select id="select_saturation_when_1" style="font-size: 1em;">
-                <option value="average_model">the average model</option>
-                <option value="best_model">the best model</option>
-                <option value="best_output">the best output</option>
-            </select>
-            <select id="select_saturation_when_2" style="font-size: 1em;">
-                <option value="hum">surpasses human performance</option>
-                <option value="nohum">stagnates for some time</option>
-            </select>
-            .
+        <h2 style="margin-top: 30px;">Dataset Saturation Overview</h2>
+        <div style="margin: 20px auto; max-width: 1100px;">
+            <div id="filter-controls" style="background-color: #f8f9fa; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #e0e0e0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <div class="saturation-definition" style="background-color: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid #e0e0e0;">
+                    <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; display: flex; align-items: center;">
+                        <span style="margin-right: 10px;">📊</span>
+                        Saturation Definition
+                    </h3>
+                    <div style="font-size: 1.3em; color: #34495e; line-height: 1.8;">
+                        Saturation is when
+                        <select id="select_saturation_when_1" class="styled-select">
+                            <option value="average_model">the average model</option>
+                            <option value="best_model">the best model</option>
+                            <option value="best_output">the best output</option>
+                        </select>
+                        <select id="select_saturation_when_2" class="styled-select">
+                            <option value="hum">surpasses human performance</option>
+                            <option value="nohum">stagnates for some time</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 0; margin-bottom: 15px; color: #2c3e50; font-size: 16px;">🎯 Quick Filters</h3>
+                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">Use these controls to filter the dataset by saturation level, or use the column dropdowns and search box for more specific filtering.</p>
+            </div>
+            <table id="saturation_datatable" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Task</th>
+                        <th>Saturation</th>
+                        <th>Year</th>
+                        <th>Access</th>
+                        <th>Size</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
-        <br><br>
-
-        <style>
-            #task_saturation td:nth-child(1) {
-        		font-weight: bold;
-                text-align: left;
-            }
-            /* other cells */
-            #task_saturation td:not(:nth-child(1)) {
-                width: 18%;
-                cursor: pointer;
-                text-align: right;
-                padding-right: 5pt;
-            }
-        </style>
-        <table id="task_saturation" style="margin-left: auto; margin-right: auto;"></table>
 
             
+        <h2 style="margin-top: 30px;">Performance Over Time</h2>
         <div id="year_chart_container" style="margin-top: 20px; margin-left: auto; margin-right: auto; width: 800px;"></div>
 
+        <h2 style="margin-top: 30px;">Dataset Clustering (PCA)</h2>
         <div id="cluster_chart_container" style="margin-top: 20px; margin-left: auto; margin-right: auto; width: 800px;"></div>
 
         <div
