@@ -99,19 +99,12 @@ table.dataTable tbody tr.selected td {
     gap: 15px;
 }
 
-.dataTables_wrapper .bottom {
-    display: flex;
+.bottom-controls {
+    display: flex !important;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
     gap: 15px;
-}
-
-/* Length selector styling */
-.dt-length {
-    display: flex;
-    align-items: center;
+    flex-wrap: nowrap;
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -120,38 +113,60 @@ table.dataTable tbody tr.selected td {
     transition: all 0.2s ease;
 }
 
-.dt-length:hover {
+.bottom-controls:hover {
     box-shadow: 0 3px 6px rgba(0,0,0,0.08);
     border-color: #d0d0d0;
+}
+
+/* Force all direct children to be inline */
+.bottom-controls > * {
+    display: inline-flex !important;
+    margin: 0 !important;
+}
+
+/* Length selector styling */
+.dt-length {
+    display: inline-flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    padding: 0 20px 0 0;
+    margin: 0 20px 0 0;
+    box-shadow: none;
+    transition: none;
+    flex-shrink: 0;
+    border-right: 1px solid #e0e0e0;
 }
 
 .dt-length label {
     display: flex;
     align-items: center;
     color: #2c3e50;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     margin: 0;
+    white-space: nowrap;
+    margin-left: 8px;
 }
 
-.dt-length label::before {
+.dt-length::before {
     content: "📋";
     margin-right: 8px;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .dt-length select.dt-input {
     background-color: #f8f9fa;
     border: 2px solid #e0e0e0;
     border-radius: 6px;
-    padding: 6px 12px;
-    margin: 0 8px;
-    font-size: 14px;
+    padding: 4px 10px;
+    margin: 0 6px;
+    font-size: 13px;
     font-weight: 500;
     color: #2c3e50;
     cursor: pointer;
     transition: all 0.2s ease;
-    min-width: 70px;
+    min-width: 60px;
 }
 
 .dt-length select.dt-input:hover {
@@ -494,29 +509,69 @@ table.dataTable thead th select:focus {
 }
 
 .dataTables_info {
-    color: #666;
+    color: #7f8c8d;
+    font-size: 13px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Pagination styling to match the page design */
+.dt-paging {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.dt-paging::before {
+    content: "📄";
+    margin-right: 8px;
     font-size: 14px;
 }
 
-.dataTables_paginate .paginate_button {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
+.dt-paging-button {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
     padding: 5px 10px;
-    margin: 0 2px;
+    margin: 0;
     cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #2c3e50;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    font-family: 'Noto Sans', sans-serif;
+    min-width: 32px;
+    text-align: center;
 }
 
-.dataTables_paginate .paginate_button.current {
-    background-color: #2c3e50;
-    color: white;
-    border-color: #2c3e50;
-}
-
-.dataTables_paginate .paginate_button:hover:not(.disabled):not(.current) {
+.dt-paging-button:hover:not(.disabled) {
     background-color: #3498db;
     color: white;
     border-color: #3498db;
 }
+
+.dt-paging-button.current {
+    background-color: #2c3e50;
+    color: white;
+    border-color: #2c3e50;
+    font-weight: 600;
+}
+
+.dt-paging-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: #95a5a6;
+    background-color: #f8f9fa;
+}
+
+.dt-paging-button.disabled:hover {
+    background-color: #f8f9fa;
+    border-color: #e0e0e0;
+}
+
+/* Style for First/Previous/Next/Last buttons - they already have content */
 
 /* Center align numeric columns and their headers */
 #saturation_datatable th:nth-child(3),
@@ -537,11 +592,23 @@ table.dataTable thead th select:focus {
     border: 1px solid #e0e0e0;
 }
 
-/* Table info and pagination styling */
-.dataTables_info {
+/* Table info styling */
+.bottom-controls .dt-info {
     color: #7f8c8d;
     font-size: 13px;
-    padding: 10px 0;
+    padding: 0 20px 0 0;
+    margin: 0 20px 0 0;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-right: 1px solid #e0e0e0;
+}
+
+.bottom-controls .dt-info::before {
+    content: "ℹ️";
+    margin-right: 8px;
+    font-size: 14px;
 }
 
 .dataTables_length label {
@@ -554,10 +621,6 @@ table.dataTable thead th select:focus {
     font-size: 14px;
 }
 
-/* Improve pagination buttons */
-.dataTables_paginate {
-    margin-top: 0;
-}
 
 /* Column specific widths */
 #saturation_datatable td:nth-child(1) {
