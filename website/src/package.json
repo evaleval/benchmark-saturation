@@ -24,6 +24,8 @@
     },
     "dependencies": {
         "billboard.js": "^3.16.0",
+        "datatables.net": "^2.1.8",
+        "datatables.net-dt": "^2.1.8",
         "jquery": "^3.7.1",
         "ml-pca": "^4.1.1"
     }
