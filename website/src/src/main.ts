@@ -148,9 +148,7 @@ function redo_task_saturation(data_saturation) {
         title: 'Access',
         render: function(data, type, row) {
           if (type === 'display') {
-            const icon = data === 'Public' ? '🌐' : '🔒';
-            const color = data === 'Public' ? '#27ae60' : '#e74c3c';
-            return `<span style="color: ${color};">${icon} ${data}</span>`;
+            return `<span>${data}</span>`;
           }
           return data;
         }
@@ -173,7 +171,7 @@ function redo_task_saturation(data_saturation) {
     order: [[2, 'desc']], // Sort by saturation descending
     pageLength: 10,
     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    dom: 'lfrtp',
+    dom: '<"top"f>rt<"bottom"lp><"clear">',
     language: {
       search: "Global filter:"
     },
