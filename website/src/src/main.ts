@@ -171,7 +171,7 @@ function redo_task_saturation(data_saturation) {
     order: [[2, 'desc']], // Sort by saturation descending
     pageLength: 10,
     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-    dom: '<"top"f>rt<"bottom"lp><"clear">',
+    dom: '<"top"f>rt<"bottom-controls"lip><"clear">',
     language: {
       search: "Global filter:"
     },
