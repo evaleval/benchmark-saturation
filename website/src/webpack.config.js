@@ -1,9 +1,11 @@
 const path = require('path');
 var webpack = require("webpack");
 module.exports = (env, argv) => {
+   const isProduction = argv.mode === 'production';
+
    return {
       entry: './src/main.ts',
-      devtool: 'inline-source-map',
+      devtool: isProduction ? 'source-map' : 'inline-source-map',
       module: {
          rules: [
             {
