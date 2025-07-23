@@ -670,3 +670,26 @@ table.dataTable thead .sorting_desc:before {
     content: "↓";
     opacity: 1;
 }
+
+#year_chart_container, #cluster_chart_container {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 5px;
+}
+
+/* styling billboard.js */
+.bb-axis path,
+.bb-axis line,
+.bb-line {
+  stroke-width: 2px !important; /* Thicker axis lines */
+}
+
+.bb-axis > .tick > line {
+    display: none; /* Hide tick lines */
+}
+
+.pca_tooltip {
+    background-color: #fff9;
+    font-size: 10pt;
+}
