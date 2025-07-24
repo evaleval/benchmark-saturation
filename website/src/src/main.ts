@@ -37,12 +37,16 @@ function fake_year_saturation(title: string, saturation: number) {
         },
         min: 0,
         max: 100,
-      }
+      },
+
     },
     // legend on the right
     legend: {
       position: "right"
     },
+    color: {
+      pattern: ["#e74c3c", "#27ae60"]
+    }
   });
 }
 
@@ -75,40 +79,40 @@ function formatDataForDataTable(data_saturation) {
 function redo_task_saturation(data_saturation) {
   // Format data for DataTable
   const tableData = formatDataForDataTable(data_saturation);
-  
+
   // Destroy existing DataTable if it exists
   if (dataTable) {
     dataTable.destroy();
   }
-  
+
   // Initialize DataTable
   dataTable = new DataTable('#saturation_datatable', {
     data: tableData,
     columns: [
-      { 
-        data: 'dataset', 
+      {
+        data: 'dataset',
         title: 'Dataset',
-        render: function(data, type, row) {
+        render: function (data, type, row) {
           if (type === 'display') {
             return `<strong>${data}</strong>`;
           }
           return data;
         }
       },
-      { 
-        data: 'task', 
+      {
+        data: 'task',
         title: 'Task',
-        render: function(data, type, row) {
+        render: function (data, type, row) {
           if (type === 'display') {
             return `<span style="background-color: #ecf0f1; padding: 3px 8px; border-radius: 4px; font-size: 12px;">${data}</span>`;
           }
           return data;
         }
       },
-      { 
+      {
         data: 'saturation',
         title: 'Saturation',
-        render: function(data, type, row) {
+        render: function (data, type, row) {
           if (type === 'display') {
             // Calculate color based on saturation
             let color = '';
@@ -123,7 +127,7 @@ function redo_task_saturation(data_saturation) {
               color = '#27ae60';
               bgColor = 'rgba(39, 174, 96, 0.1)';
             }
-            
+
             return `<div style="display: flex; align-items: center; justify-content: center;">
                       <div style="background-color: ${bgColor}; padding: 4px 12px; border-radius: 20px; border: 1px solid ${color};">
                         <span style="color: ${color}; font-weight: 600;">${data.toFixed(2)}</span>
@@ -133,30 +137,30 @@ function redo_task_saturation(data_saturation) {
           return data;
         }
       },
-      { 
-        data: 'year', 
+      {
+        data: 'year',
         title: 'Year',
-        render: function(data, type, row) {
+        render: function (data, type, row) {
           if (type === 'display') {
             return `<span style="color: #7f8c8d;">${data}</span>`;
           }
           return data;
         }
       },
-      { 
-        data: 'access', 
+      {
+        data: 'access',
         title: 'Access',
-        render: function(data, type, row) {
+        render: function (data, type, row) {
           if (type === 'display') {
             return `<span>${data}</span>`;
           }
           return data;
         }
       },
-      { 
-        data: 'size', 
+      {
+        data: 'size',
         title: 'Size',
-        render: function(data, type, row) {
+        render: function (data, type, row) {
           if (type === 'display') {
             return `<div style="display: flex; align-items: center; justify-content: center;">
                       <div style="background-color: #ecf0f1; padding: 2px 10px; border-radius: 4px;">
@@ -175,17 +179,17 @@ function redo_task_saturation(data_saturation) {
     language: {
       search: "Global filter:"
     },
-    initComplete: function() {
+    initComplete: function () {
       // Add select filters for Task and Access columns
-      this.api().columns([1, 4]).every(function() {
+      this.api().columns([1, 4]).every(function () {
         const column = this;
         const columnName = column.index() === 1 ? 'task' : 'access';
         const select = $('<select><option value="">All</option></select>')
           .appendTo($(column.header()))
-          .on('change', function() {
+          .on('change', function () {
             const val = $(this).val();
             column.search(val ? '^' + val + '$' : '', true, false).draw();
-            
+
             // Update active filters
             if (val) {
               activeFilters[columnName] = val;
@@ -194,64 +198,64 @@ function redo_task_saturation(data_saturation) {
             }
             updateFilterDisplay();
           })
-          .on('click', function(e) {
+          .on('click', function (e) {
             e.stopPropagation();
           });
-        
-        column.data().unique().sort().each(function(d, j) {
+
+        column.data().unique().sort().each(function (d, j) {
           select.append('<option value="' + d + '">' + d + '</option>');
         });
       });
-      
+
       // Check if buttons already exist
       if ($('#filter-controls .filter-buttons').length > 0) {
         return; // Buttons already added, don't add them again
       }
-      
+
       // Move buttons to filter control area
       const filterButtons = $('<div class="filter-buttons"></div>');
-      
+
       // Create saturation filter buttons
       const saturationButtons = [
         { text: 'High Saturation (>0.9)', class: 'saturation-filter-btn', filter: 'high' },
         { text: 'Medium Saturation (0.7-0.9)', class: 'saturation-filter-btn', filter: 'medium' },
         { text: 'Low Saturation (<0.7)', class: 'saturation-filter-btn', filter: 'low' }
       ];
-      
+
       saturationButtons.forEach(btn => {
         $(`<button class="filter-btn ${btn.class}" data-filter="${btn.filter}">${btn.text}</button>`)
           .appendTo(filterButtons)
-          .on('click', function() {
+          .on('click', function () {
             $('.saturation-filter-btn').removeClass('active');
             $(this).addClass('active');
-            
+
             $.fn.dataTable.ext.search.pop();
             if (btn.filter === 'high') {
-              $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+              $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 return parseFloat(data[2]) > 0.9;
               });
               activeFilters.saturation = 'High (>0.9)';
             } else if (btn.filter === 'medium') {
-              $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+              $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 const sat = parseFloat(data[2]);
                 return sat >= 0.7 && sat <= 0.9;
               });
               activeFilters.saturation = 'Medium (0.7-0.9)';
             } else {
-              $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+              $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
                 return parseFloat(data[2]) < 0.7;
               });
               activeFilters.saturation = 'Low (<0.7)';
             }
-            
+
             updateFilterDisplay();
             dataTable.draw();
           });
       });
-      
+
       $(`<button class="filter-btn clear-filter-btn">Clear All Filters</button>`)
         .appendTo(filterButtons)
-        .on('click', function() {
+        .on('click', function () {
           $.fn.dataTable.ext.search = [];
           dataTable.search('').columns().search('').draw();
           $('#saturation_datatable thead select').val('');
@@ -259,15 +263,15 @@ function redo_task_saturation(data_saturation) {
           activeFilters = { saturation: null, task: null, access: null, global: null };
           updateFilterDisplay();
         });
-      
+
       $('#filter-controls').append(filterButtons);
-      
+
       // Add filter display area
       $('<div id="active-filters" style="display: none;"></div>')
         .insertAfter('#filter-controls');
-        
+
       // Track global search filter
-      $(document).on('keyup', '.dt-search input.dt-input', function() {
+      $(document).on('keyup', '.dt-search input.dt-input', function () {
         const val = $(this).val() as string;
         if (val && val.trim() !== '') {
           activeFilters.global = val;
@@ -276,17 +280,17 @@ function redo_task_saturation(data_saturation) {
         }
         updateFilterDisplay();
       });
-      
+
       // Add placeholder to search input
       $('.dt-search input.dt-input').attr('placeholder', 'Search datasets...');
     }
   });
-  
+
   // Add click handler for rows
-  $('#saturation_datatable tbody').on('click', 'tr', function() {
+  $('#saturation_datatable tbody').on('click', 'tr', function () {
     const data = dataTable.row(this).data();
     fake_year_saturation(`${data.task} / ${data.dataset}`, data.saturation);
-    
+
     // Highlight selected row
     $('#saturation_datatable tbody tr').removeClass('selected');
     $(this).addClass('selected');
@@ -294,9 +298,9 @@ function redo_task_saturation(data_saturation) {
 
   // Generate initial PCA visualization
   updatePCAVisualization(data_saturation);
-  
+
   // Update PCA when DataTable is redrawn (filtered/sorted)
-  dataTable.on('draw', function() {
+  dataTable.on('draw', function () {
     updatePCAFromDataTable();
   });
 }
@@ -306,7 +310,7 @@ let pcaChart: any = null;
 function updateFilterDisplay() {
   const filterDisplay = $('#active-filters');
   const filters = [];
-  
+
   if (activeFilters.global) {
     filters.push(`
       <div class="filter-tag">
@@ -318,8 +322,8 @@ function updateFilterDisplay() {
     `);
   }
   if (activeFilters.saturation) {
-    const icon = activeFilters.saturation.includes('High') ? '🔴' : 
-                 activeFilters.saturation.includes('Medium') ? '🟡' : '🟢';
+    const icon = activeFilters.saturation.includes('High') ? '🔴' :
+      activeFilters.saturation.includes('Medium') ? '🟡' : '🟢';
     filters.push(`
       <div class="filter-tag">
         <span class="filter-icon">${icon}</span>
@@ -350,7 +354,7 @@ function updateFilterDisplay() {
       </div>
     `);
   }
-  
+
   if (filters.length > 0) {
     filterDisplay.html(`
       <div class="filters-header">
@@ -368,7 +372,7 @@ function updateFilterDisplay() {
 function updatePCAFromDataTable() {
   // Get currently visible rows from DataTable
   const visibleData = dataTable.rows({ search: 'applied' }).data().toArray();
-  
+
   // Reconstruct data_saturation structure from visible rows
   const filteredDataSaturation = {};
   visibleData.forEach(row => {
@@ -382,19 +386,19 @@ function updatePCAFromDataTable() {
       size: row.size
     };
   });
-  
+
   updatePCAVisualization(filteredDataSaturation);
 }
 
 function updatePCAVisualization(data_saturation) {
   let data_saturation_vec = getVectorizedDataSaturation(data_saturation);
-  
+
   // Need at least 2 data points for PCA
   if (data_saturation_vec.length < 2) {
     $('#cluster_chart_container').html('<p style="text-align: center; color: #666;">Not enough data points for PCA visualization (need at least 2)</p>');
     return;
   }
-  
+
   const pca = new PCA(data_saturation_vec.map(d => d.vector));
   let data_saturation_new = pca.predict(data_saturation_vec.map(d => d.vector)).to2DArray();
 
@@ -405,6 +409,9 @@ function updatePCAVisualization(data_saturation) {
 
   pcaChart = bb.generate({
     bindto: "#cluster_chart_container",
+    size: {
+      width: 750,
+    },
     data: {
       type: scatter(),
       xs: {
@@ -423,7 +430,7 @@ function updatePCAVisualization(data_saturation) {
     tooltip: {
       contents: function (d) {
         const data_point = data_saturation_vec[d[0].index];
-        return `${data_point.task} / ${data_point.name}`;
+        return `<span class="pca_tooltip">${data_point.task} / ${data_point.name}<span>`;
       }
     },
     axis: {
@@ -440,8 +447,12 @@ function updatePCAVisualization(data_saturation) {
         },
       }
     },
+    color: {
+      pattern: ["#e74c3c"]
+    },
     legend: {
-      position: "right"
+      // position: "right"
+      show: false,
     },
     title: {
       text: `PCA Visualization (${data_saturation_vec.length} datasets)`
@@ -453,8 +464,6 @@ let saturation_when_1 = "average_model";
 let saturation_when_2 = "hum";
 
 function refresh_saturation_when() {
-  $("#img_saturation_when").attr("src", `figures/mock_performance_${saturation_when_1}_${saturation_when_2}.svg`);
-
   // clone DATA_SATURATION
   let data_saturation = JSON.parse(JSON.stringify(DATA_SATURATION));
   // modify in place
@@ -492,12 +501,12 @@ $("#select_saturation_when_1").trigger("change");
 $("#select_saturation_when_2").trigger("change");
 
 // Global filter clear functions
-(window as any).clearGlobalFilter = function() {
+(window as any).clearGlobalFilter = function () {
   $('.dt-search input.dt-input').val('').trigger('keyup');
   dataTable.search('').draw();
 };
 
-(window as any).clearSaturationFilter = function() {
+(window as any).clearSaturationFilter = function () {
   $('.saturation-filter-btn').removeClass('active');
   $.fn.dataTable.ext.search = [];
   activeFilters.saturation = null;
@@ -505,14 +514,14 @@ $("#select_saturation_when_2").trigger("change");
   dataTable.draw();
 };
 
-(window as any).clearTaskFilter = function() {
+(window as any).clearTaskFilter = function () {
   $('#saturation_datatable thead select').eq(0).val('').trigger('change');
 };
 
-(window as any).clearAccessFilter = function() {
+(window as any).clearAccessFilter = function () {
   $('#saturation_datatable thead select').eq(1).val('').trigger('change');
 };
 
-(window as any).clearAllFilters = function() {
+(window as any).clearAllFilters = function () {
   $('.clear-filter-btn').click();
 };
