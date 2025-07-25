@@ -1,5 +1,5 @@
 import { DEVMODE } from "./globals"
-import { DATA_SATURATION, getVectorizedDataSaturation } from "./data_connector"
+import { DATA_SATURATION, fetch_data_saturation, getVectorizedDataSaturation } from "./data_connector"
 import $ from 'jquery';
 import bb, { line, scatter } from "billboard.js";
 import "billboard.js/dist/billboard.css";
@@ -497,8 +497,25 @@ $("#select_saturation_when_2").on("change", function () {
   }, 300);
 })
 
-$("#select_saturation_when_1").trigger("change");
-$("#select_saturation_when_2").trigger("change");
+async function main() {
+    const loader = document.getElementById('loader');
+    const content = document.getElementById('content');
+
+    // Show loader and hide content
+    loader.style.display = 'block';
+    content.style.display = 'none';
+
+    await fetch_data_saturation();
+
+    // Hide loader and show content
+    loader.style.display = 'none';
+    content.style.display = 'block';
+
+    $("#select_saturation_when_1").trigger("change");
+    $("#select_saturation_when_2").trigger("change");
+}
+
+main();
 
 // Global filter clear functions
 (window as any).clearGlobalFilter = function () {
