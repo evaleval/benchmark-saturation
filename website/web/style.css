@@ -689,7 +689,7 @@ table.dataTable thead .sorting_desc:before {
     display: none; /* Hide tick lines */
 }
 
-.pca_tooltip {
+.umap_tooltip {
     background-color: #fff9;
     font-size: 10pt;
 }

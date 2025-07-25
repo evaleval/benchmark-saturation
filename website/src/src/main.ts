@@ -3,7 +3,6 @@ import { DATA_SATURATION, fetch_data_saturation, getVectorizedDataSaturation } f
 import $ from 'jquery';
 import bb, { line, scatter } from "billboard.js";
 import "billboard.js/dist/billboard.css";
-import { PCA } from "ml-pca";
 import DataTable from 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 
@@ -296,16 +295,16 @@ function redo_task_saturation(data_saturation) {
     $(this).addClass('selected');
   });
 
-  // Generate initial PCA visualization
-  updatePCAVisualization(data_saturation);
+  // Generate initial UMAP visualization
+  updateUMAPVisualization(data_saturation);
 
-  // Update PCA when DataTable is redrawn (filtered/sorted)
+  // Update UMAP when DataTable is redrawn (filtered/sorted)
   dataTable.on('draw', function () {
-    updatePCAFromDataTable();
+    updateUMAPFromDataTable();
   });
 }
 
-let pcaChart: any = null;
+let umapChart: any = null;
 
 function updateFilterDisplay() {
   const filterDisplay = $('#active-filters');
@@ -369,95 +368,91 @@ function updateFilterDisplay() {
   }
 }
 
-function updatePCAFromDataTable() {
+function updateUMAPFromDataTable() {
   // Get currently visible rows from DataTable
   const visibleData = dataTable.rows({ search: 'applied' }).data().toArray();
 
-  // Reconstruct data_saturation structure from visible rows
-  const filteredDataSaturation = {};
-  visibleData.forEach(row => {
-    if (!filteredDataSaturation[row.task]) {
-      filteredDataSaturation[row.task] = {};
-    }
-    filteredDataSaturation[row.task][row.dataset] = {
-      saturation: row.saturation,
-      year: row.year,
-      public: row.access === "Public",
-      size: row.size
-    };
-  });
-
-  updatePCAVisualization(filteredDataSaturation);
+  // Filter projections based on visible data
+  updateUMAPVisualization(visibleData);
 }
 
-function updatePCAVisualization(data_saturation) {
-  let data_saturation_vec = getVectorizedDataSaturation(data_saturation);
+async function updateUMAPVisualization(filteredData = null) {
+  try {
+    // Load pre-computed projections
+    const response = await fetch('data/projections.json');
+    const projections = await response.json();
 
-  // Need at least 2 data points for PCA
-  if (data_saturation_vec.length < 2) {
-    $('#cluster_chart_container').html('<p style="text-align: center; color: #666;">Not enough data points for PCA visualization (need at least 2)</p>');
-    return;
-  }
-
-  const pca = new PCA(data_saturation_vec.map(d => d.vector));
-  let data_saturation_new = pca.predict(data_saturation_vec.map(d => d.vector)).to2DArray();
-
-  // Destroy existing chart if it exists
-  if (pcaChart) {
-    pcaChart.destroy();
-  }
-
-  pcaChart = bb.generate({
-    bindto: "#cluster_chart_container",
-    size: {
-      width: 750,
-    },
-    data: {
-      type: scatter(),
-      xs: {
-        dataset: "dataset_x",
-      },
-      columns: [
-        // take first two dimensions
-        ["dataset_x", ...data_saturation_new.map(d => d[0])],
-        ["dataset", ...data_saturation_new.map(d => d[1])],
-      ],
-      onclick: function (d) {
-        const data_point = data_saturation_vec[d.index];
-        fake_year_saturation(`${data_point.task} / ${data_point.name}`, data_point.saturation)
-      },
-    },
-    tooltip: {
-      contents: function (d) {
-        const data_point = data_saturation_vec[d[0].index];
-        return `<span class="pca_tooltip">${data_point.task} / ${data_point.name}<span>`;
-      }
-    },
-    axis: {
-      x: {
-        label: "Dimension 1",
-        tick: {
-          values: [],
-        },
-      },
-      y: {
-        label: "Dimension 2",
-        tick: {
-          values: [],
-        },
-      }
-    },
-    color: {
-      pattern: ["#e74c3c"]
-    },
-    legend: {
-      // position: "right"
-      show: false,
-    },
-    title: {
-      text: `PCA Visualization (${data_saturation_vec.length} datasets)`
+    // Filter projections if filtered data is provided
+    let visibleProjections = projections;
+    if (filteredData && Array.isArray(filteredData)) {
+      const visibleDatasets = new Set(filteredData.map(row => row.dataset));
+      visibleProjections = projections.filter(proj => visibleDatasets.has(proj.name));
     }
-  })
+
+    // Need at least 2 data points for visualization
+    if (visibleProjections.length < 2) {
+      $('#cluster_chart_container').html('<p style="text-align: center; color: #666;">Not enough data points for UMAP visualization (need at least 2)</p>');
+      return;
+    }
+
+    // Destroy existing chart if it exists
+    if (umapChart) {
+      umapChart.destroy();
+    }
+
+    umapChart = bb.generate({
+      bindto: "#cluster_chart_container",
+      size: {
+        width: 750,
+      },
+      data: {
+        type: scatter(),
+        xs: {
+          dataset: "dataset_x",
+        },
+        columns: [
+          ["dataset_x", ...visibleProjections.map(d => d.x)],
+          ["dataset", ...visibleProjections.map(d => d.y)],
+        ],
+        onclick: function (d) {
+          const data_point = visibleProjections[d.index];
+          fake_year_saturation(`${data_point.task} / ${data_point.name}`, data_point.saturation)
+        },
+      },
+      tooltip: {
+        contents: function (d) {
+          const data_point = visibleProjections[d[0].index];
+          return `<span class="umap_tooltip">${data_point.task} / ${data_point.name}<span>`;
+        }
+      },
+      axis: {
+        x: {
+          label: "UMAP Dimension 1",
+          tick: {
+            values: [],
+          },
+        },
+        y: {
+          label: "UMAP Dimension 2",
+          tick: {
+            values: [],
+          },
+        }
+      },
+      color: {
+        pattern: ["#e74c3c"]
+      },
+      legend: {
+        show: false,
+      },
+      title: {
+        text: `UMAP Visualization (${visibleProjections.length} datasets)`
+      }
+    });
+  } catch (error) {
+    console.error('Error loading projections:', error);
+    $('#cluster_chart_container').html('<p style="text-align: center; color: #666;">Error loading UMAP visualization</p>');
+  }
 }
 
 let saturation_when_1 = "average_model";
