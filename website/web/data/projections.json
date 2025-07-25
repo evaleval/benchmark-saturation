@@ -1,0 +1,492 @@
+[
+  {
+    "name": "WMT20",
+    "task": "Translation",
+    "saturation": 0.9,
+    "x": 3.5329763889312744,
+    "y": 11.85244083404541
+  },
+  {
+    "name": "WMT21",
+    "task": "Translation",
+    "saturation": 0.85,
+    "x": 3.6122772693634033,
+    "y": 12.175298690795898
+  },
+  {
+    "name": "WMT22",
+    "task": "Translation",
+    "saturation": 0.8,
+    "x": 3.5119869709014893,
+    "y": 11.805851936340332
+  },
+  {
+    "name": "WMT23",
+    "task": "Translation",
+    "saturation": 0.8,
+    "x": 3.5613391399383545,
+    "y": 12.107125282287598
+  },
+  {
+    "name": "WMT24",
+    "task": "Translation",
+    "saturation": 0.77,
+    "x": 3.8305015563964844,
+    "y": 12.14299488067627
+  },
+  {
+    "name": "SummEval",
+    "task": "Summarization",
+    "saturation": 1.0,
+    "x": 6.601155757904053,
+    "y": 9.606281280517578
+  },
+  {
+    "name": "MyEval",
+    "task": "Summarization",
+    "saturation": 0.7,
+    "x": 6.99563455581665,
+    "y": 9.76455307006836
+  },
+  {
+    "name": "BookSum",
+    "task": "Summarization",
+    "saturation": 1.0,
+    "x": 6.645829677581787,
+    "y": 9.500019073486328
+  },
+  {
+    "name": "ScisummNet",
+    "task": "Summarization",
+    "saturation": 0.95,
+    "x": 6.796776294708252,
+    "y": 9.426114082336426
+  },
+  {
+    "name": "LongSum",
+    "task": "Summarization",
+    "saturation": 0.3,
+    "x": 7.06406831741333,
+    "y": 9.981793403625488
+  },
+  {
+    "name": "HellaSwag",
+    "task": "Open-Ended",
+    "saturation": 0.6,
+    "x": 8.011480331420898,
+    "y": 12.63090991973877
+  },
+  {
+    "name": "OpenBookQA",
+    "task": "Open-Ended",
+    "saturation": 0.45,
+    "x": 8.090879440307617,
+    "y": 12.630791664123535
+  },
+  {
+    "name": "ARC",
+    "task": "Open-Ended",
+    "saturation": 0.6,
+    "x": 8.114336013793945,
+    "y": 12.567676544189453
+  },
+  {
+    "name": "MMLU",
+    "task": "Open-Ended",
+    "saturation": 0.85,
+    "x": 7.9288249015808105,
+    "y": 12.555508613586426
+  },
+  {
+    "name": "Winogrande",
+    "task": "Open-Ended",
+    "saturation": 0.9,
+    "x": 7.841241359710693,
+    "y": 12.818045616149902
+  },
+  {
+    "name": "TriviaQA",
+    "task": "Closed-Ended",
+    "saturation": 1.0,
+    "x": 5.7520880699157715,
+    "y": 8.538041114807129
+  },
+  {
+    "name": "NaturalQuest",
+    "task": "Closed-Ended",
+    "saturation": 0.99,
+    "x": 5.9242048263549805,
+    "y": 8.70059871673584
+  },
+  {
+    "name": "HotpotQA",
+    "task": "Closed-Ended",
+    "saturation": 1.0,
+    "x": 5.769077301025391,
+    "y": 8.922722816467285
+  },
+  {
+    "name": "WebQuestions",
+    "task": "Closed-Ended",
+    "saturation": 0.99,
+    "x": 6.046011447906494,
+    "y": 8.797266960144043
+  },
+  {
+    "name": "SearchQA",
+    "task": "Closed-Ended",
+    "saturation": 0.99,
+    "x": 5.801962852478027,
+    "y": 8.598353385925293
+  },
+  {
+    "name": "ARC",
+    "task": "Reasoning",
+    "saturation": 0.6,
+    "x": 8.059211730957031,
+    "y": 11.898818969726562
+  },
+  {
+    "name": "HellaSwag",
+    "task": "Reasoning",
+    "saturation": 0.6,
+    "x": 7.950589656829834,
+    "y": 11.614466667175293
+  },
+  {
+    "name": "OpenBookQA",
+    "task": "Reasoning",
+    "saturation": 0.45,
+    "x": 8.165836334228516,
+    "y": 11.712608337402344
+  },
+  {
+    "name": "MMLU",
+    "task": "Reasoning",
+    "saturation": 0.85,
+    "x": 8.247671127319336,
+    "y": 11.80896282196045
+  },
+  {
+    "name": "Winogrande",
+    "task": "Reasoning",
+    "saturation": 0.9,
+    "x": 8.000589370727539,
+    "y": 11.512208938598633
+  },
+  {
+    "name": "MS MARCO",
+    "task": "Retrieval",
+    "saturation": 0.95,
+    "x": 4.193902969360352,
+    "y": 9.207406044006348
+  },
+  {
+    "name": "TREC",
+    "task": "Retrieval",
+    "saturation": 0.9,
+    "x": 4.265140533447266,
+    "y": 9.349629402160645
+  },
+  {
+    "name": "NQ",
+    "task": "Retrieval",
+    "saturation": 0.99,
+    "x": 3.9528489112854004,
+    "y": 9.39258098602295
+  },
+  {
+    "name": "HotpotQA",
+    "task": "Retrieval",
+    "saturation": 1.0,
+    "x": 4.233558177947998,
+    "y": 9.124120712280273
+  },
+  {
+    "name": "TriviaQA",
+    "task": "Retrieval",
+    "saturation": 1.0,
+    "x": 4.392767906188965,
+    "y": 9.166178703308105
+  },
+  {
+    "name": "AG News",
+    "task": "Classification",
+    "saturation": 0.95,
+    "x": 7.435995578765869,
+    "y": 8.360871315002441
+  },
+  {
+    "name": "SST-2",
+    "task": "Classification",
+    "saturation": 0.9,
+    "x": 7.348807334899902,
+    "y": 8.491427421569824
+  },
+  {
+    "name": "IMDB",
+    "task": "Classification",
+    "saturation": 0.85,
+    "x": 7.727361679077148,
+    "y": 8.067094802856445
+  },
+  {
+    "name": "Yelp",
+    "task": "Classification",
+    "saturation": 0.8,
+    "x": 7.6423258781433105,
+    "y": 8.176752090454102
+  },
+  {
+    "name": "TREC",
+    "task": "Classification",
+    "saturation": 0.9,
+    "x": 7.420914173126221,
+    "y": 8.408551216125488
+  },
+  {
+    "name": "WikiText-2",
+    "task": "Generation",
+    "saturation": 0.9,
+    "x": 8.642542839050293,
+    "y": 10.654541015625
+  },
+  {
+    "name": "LAMBADA",
+    "task": "Generation",
+    "saturation": 0.85,
+    "x": 8.963269233703613,
+    "y": 10.6337251663208
+  },
+  {
+    "name": "Text8",
+    "task": "Generation",
+    "saturation": 0.8,
+    "x": 8.84361743927002,
+    "y": 10.767936706542969
+  },
+  {
+    "name": "PTB",
+    "task": "Generation",
+    "saturation": 0.75,
+    "x": 8.5015230178833,
+    "y": 10.562018394470215
+  },
+  {
+    "name": "Penn Treebank",
+    "task": "Generation",
+    "saturation": 0.7,
+    "x": 8.537737846374512,
+    "y": 11.01521110534668
+  },
+  {
+    "name": "ImageNet",
+    "task": "Vision",
+    "saturation": 0.95,
+    "x": 9.685382843017578,
+    "y": 8.443300247192383
+  },
+  {
+    "name": "CIFAR-10",
+    "task": "Vision",
+    "saturation": 0.9,
+    "x": 9.778294563293457,
+    "y": 8.53072738647461
+  },
+  {
+    "name": "CIFAR-100",
+    "task": "Vision",
+    "saturation": 0.85,
+    "x": 9.681381225585938,
+    "y": 8.793391227722168
+  },
+  {
+    "name": "MNIST",
+    "task": "Vision",
+    "saturation": 0.8,
+    "x": 10.001202583312988,
+    "y": 8.509587287902832
+  },
+  {
+    "name": "FashionMNIST",
+    "task": "Vision",
+    "saturation": 0.75,
+    "x": 9.519375801086426,
+    "y": 8.740413665771484
+  },
+  {
+    "name": "LibriSpeech",
+    "task": "Audio",
+    "saturation": 0.95,
+    "x": 6.654099464416504,
+    "y": 13.120553970336914
+  },
+  {
+    "name": "CommonVoice",
+    "task": "Audio",
+    "saturation": 0.9,
+    "x": 6.510944843292236,
+    "y": 12.860893249511719
+  },
+  {
+    "name": "VoxCeleb",
+    "task": "Audio",
+    "saturation": 0.85,
+    "x": 6.409794807434082,
+    "y": 13.015776634216309
+  },
+  {
+    "name": "Urban8K",
+    "task": "Audio",
+    "saturation": 0.8,
+    "x": 6.2242751121521,
+    "y": 12.886969566345215
+  },
+  {
+    "name": "ESC-50",
+    "task": "Audio",
+    "saturation": 0.75,
+    "x": 6.539693355560303,
+    "y": 12.700703620910645
+  },
+  {
+    "name": "VQA",
+    "task": "Multimodal",
+    "saturation": 0.9,
+    "x": 6.79241418838501,
+    "y": 11.155158996582031
+  },
+  {
+    "name": "MS COCO",
+    "task": "Multimodal",
+    "saturation": 0.85,
+    "x": 6.510048866271973,
+    "y": 11.358931541442871
+  },
+  {
+    "name": "Flickr30k",
+    "task": "Multimodal",
+    "saturation": 0.8,
+    "x": 6.763461112976074,
+    "y": 11.43781852722168
+  },
+  {
+    "name": "Visual Genome",
+    "task": "Multimodal",
+    "saturation": 0.75,
+    "x": 6.713433742523193,
+    "y": 11.445952415466309
+  },
+  {
+    "name": "CLEVR",
+    "task": "Multimodal",
+    "saturation": 0.7,
+    "x": 7.022225856781006,
+    "y": 11.29328727722168
+  },
+  {
+    "name": "UCR Archive",
+    "task": "Time Series",
+    "saturation": 0.95,
+    "x": 10.024746894836426,
+    "y": 12.338214874267578
+  },
+  {
+    "name": "ECG5000",
+    "task": "Time Series",
+    "saturation": 0.9,
+    "x": 10.06119155883789,
+    "y": 12.279294967651367
+  },
+  {
+    "name": "ElectricDevices",
+    "task": "Time Series",
+    "saturation": 0.85,
+    "x": 10.051146507263184,
+    "y": 12.676993370056152
+  },
+  {
+    "name": "FaceDetection",
+    "task": "Time Series",
+    "saturation": 0.8,
+    "x": 9.823065757751465,
+    "y": 12.522797584533691
+  },
+  {
+    "name": "GesturePhase",
+    "task": "Time Series",
+    "saturation": 0.75,
+    "x": 9.677875518798828,
+    "y": 12.541743278503418
+  },
+  {
+    "name": "Cora",
+    "task": "Graph",
+    "saturation": 0.9,
+    "x": 10.610681533813477,
+    "y": 10.769493103027344
+  },
+  {
+    "name": "Citeseer",
+    "task": "Graph",
+    "saturation": 0.85,
+    "x": 10.457385063171387,
+    "y": 10.789485931396484
+  },
+  {
+    "name": "Pubmed",
+    "task": "Graph",
+    "saturation": 0.8,
+    "x": 10.614529609680176,
+    "y": 10.96617317199707
+  },
+  {
+    "name": "Reddit",
+    "task": "Graph",
+    "saturation": 0.75,
+    "x": 10.759283065795898,
+    "y": 10.625165939331055
+  },
+  {
+    "name": "Amazon",
+    "task": "Graph",
+    "saturation": 0.7,
+    "x": 10.40578842163086,
+    "y": 10.941514015197754
+  },
+  {
+    "name": "Adult",
+    "task": "Tabular",
+    "saturation": 0.95,
+    "x": 10.903059005737305,
+    "y": 9.633820533752441
+  },
+  {
+    "name": "IncomeCens",
+    "task": "Tabular",
+    "saturation": 0.9,
+    "x": 10.99842357635498,
+    "y": 9.48831844329834
+  },
+  {
+    "name": "Card Fraud",
+    "task": "Tabular",
+    "saturation": 0.85,
+    "x": 10.970475196838379,
+    "y": 9.678041458129883
+  },
+  {
+    "name": "Titanic",
+    "task": "Tabular",
+    "saturation": 0.8,
+    "x": 10.88916015625,
+    "y": 9.515847206115723
+  },
+  {
+    "name": "House Prices",
+    "task": "Tabular",
+    "saturation": 0.75,
+    "x": 11.237787246704102,
+    "y": 9.605974197387695
+  }
+]
