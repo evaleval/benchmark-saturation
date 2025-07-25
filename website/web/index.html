@@ -22,81 +22,86 @@
 </head>
 
 <body style='text-align: center; padding-top: 0px; background-color: #eee;'>
-    <h1 style="font-size: 6.45em; font-weight: bold; color: #2c3e50;">benchmark saturation</h1>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading data...</p>
+    </div>
+    <div id="content" style="display: none;">
+        <h1 style="font-size: 6.45em; font-weight: bold; color: #2c3e50;">benchmark saturation</h1>
 
-    <div style="width: 1140px; margin-left: auto; margin-right: auto;">
-        <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: -45px; background-color: #2c3e50;">
-        </div>
-
-        <br><br>
-        <div style="text-align: justify">
-            <p>
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                What does it mean when benchmarks in Machine Learning become saturated?
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intro text.
-                Some intr
-            </p>
-        </div>
-
-        <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
-        </div>
-        <br><br>
-
-
-        <h2 style="margin-top: 30px;">Dataset Saturation Overview</h2>
-        <div style="margin: 20px auto; max-width: 1100px;">
-            <div id="filter-controls" style="background-color: #f8f9fa; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #e0e0e0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <div class="saturation-definition" style="background-color: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid #e0e0e0;">
-                    <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; display: flex; align-items: center;">
-                        <span style="margin-right: 10px;">📊</span>
-                        Saturation Definition
-                    </h3>
-                    <div style="font-size: 1.3em; color: #34495e; line-height: 1.8;">
-                        Saturation is when
-                        <select id="select_saturation_when_1" class="styled-select">
-                            <option value="average_model">the average model</option>
-                            <option value="best_model">the best model</option>
-                            <option value="best_output">the best output</option>
-                        </select>
-                        <select id="select_saturation_when_2" class="styled-select">
-                            <option value="hum">surpasses human performance</option>
-                            <option value="nohum">stagnates for some time</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <h3 style="margin-top: 0; margin-bottom: 15px; color: #2c3e50; font-size: 16px;">🎯 Quick Filters</h3>
-                <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">Use these controls to filter the dataset by saturation level, or use the column dropdowns and search box for more specific filtering.</p>
+        <div style="width: 1140px; margin-left: auto; margin-right: auto;">
+            <div
+                style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: -45px; background-color: #2c3e50;">
             </div>
-            <table id="saturation_datatable" class="display" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Dataset</th>
-                        <th>Task</th>
-                        <th>Saturation</th>
-                        <th>Year</th>
-                        <th>Access</th>
-                        <th>Size</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+
+            <br><br>
+            <div style="text-align: justify">
+                <p>
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    What does it mean when benchmarks in Machine Learning become saturated?
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intro text.
+                    Some intr
+                </p>
+            </div>
+
+            <div
+                style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
+            </div>
+            <br><br>
+
+
+            <h2 style="margin-top: 30px;">Dataset Saturation Overview</h2>
+            <div style="margin: 20px auto; max-width: 1100px;">
+                <div id="filter-controls" style="background-color: #f8f9fa; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #e0e0e0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div class="saturation-definition" style="background-color: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid #e0e0e0;">
+                        <h3 style="margin: 0 0 15px 0; color: #2c3e50; font-size: 18px; display: flex; align-items: center;">
+                            <span style="margin-right: 10px;">📊</span>
+                            Saturation Definition
+                        </h3>
+                        <div style="font-size: 1.3em; color: #34495e; line-height: 1.8;">
+                            Saturation is when
+                            <select id="select_saturation_when_1" class="styled-select">
+                                <option value="average_model">the average model</option>
+                                <option value="best_model">the best model</option>
+                                <option value="best_output">the best output</option>
+                            </select>
+                            <select id="select_saturation_when_2" class="styled-select">
+                                <option value="hum">surpasses human performance</option>
+                                <option value="nohum">stagnates for some time</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-top: 0; margin-bottom: 15px; color: #2c3e50; font-size: 16px;">🎯 Quick Filters</h3>
+                    <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 14px;">Use these controls to filter the dataset by saturation level, or use the column dropdowns and search box for more specific filtering.</p>
+                </div>
+                <table id="saturation_datatable" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Dataset</th>
+                            <th>Task</th>
+                            <th>Saturation</th>
+                            <th>Year</th>
+                            <th>Access</th>
+                            <th>Size</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
 
             
         <h2 style="margin-top: 30px;">Performance Over Time</h2>
@@ -107,20 +112,19 @@
         <h2 style="margin-top: 30px;">Dataset Clustering (PCA)</h2>
         <div id="cluster_chart_container" style="margin-top: 20px; margin-left: auto; margin-right: auto; width: 800px;"></div>
 
-        <div
-            style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
+            <div
+                style="margin-left: auto; margin-right: auto; width: 100%; height: 15px; margin-top: 45px; background-color: #2c3e50;">
+            </div>
+            <br><br>
+
+            <!-- footer -->
+            <p>
+                Part of the EvalEval project in 2025. Work in progress..
+            </p>
+
+            <div style="height: 100px;"></div>
         </div>
-        <br><br>
-
-        <!-- footer -->
-        <p>
-            Part of the EvalEval project in 2025. Work in progress..
-        </p>
-
-        <div style="height: 100px;"></div>
     </div>
-
-
     <script id="nocachescript"></script>
     <script>
         var randomNum = String((Math.floor(Math.random() * 10e10)));
@@ -128,4 +132,4 @@
     </script>
 </body>
 
-</htm22
+</html>
