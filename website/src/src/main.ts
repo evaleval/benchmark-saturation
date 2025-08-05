@@ -6,6 +6,99 @@ import "billboard.js/dist/billboard.css";
 import DataTable from 'datatables.net-dt';
 import 'datatables.net-dt/css/dataTables.dataTables.min.css';
 
+// Color palette constants for consistency across the application
+const COLORS = {
+  // Saturation levels (matching table design)
+  HIGH_SATURATION: '#e74c3c',    // Red for high saturation (>0.9)
+  MEDIUM_SATURATION: '#f39c12',  // Orange for medium saturation (0.7-0.9)
+  LOW_SATURATION: '#27ae60',     // Green for low saturation (<0.7)
+  
+  // Supporting colors
+  HIGH_SATURATION_BORDER: '#c0392b',
+  MEDIUM_SATURATION_BORDER: '#e67e22',
+  LOW_SATURATION_BORDER: '#229954',
+  
+  // UI colors
+  BACKGROUND: '#f8f9fa',
+  BORDER: '#e0e0e0',
+  TEXT_PRIMARY: '#2c3e50',
+  TEXT_SECONDARY: '#7f8c8d'
+};
+
+// Saturation thresholds
+const SATURATION_THRESHOLDS = {
+  HIGH: 0.9,
+  MEDIUM: 0.7
+};
+
+// Helper function to get saturation colors consistently
+function getSaturationColors(saturation: number) {
+  if (saturation > SATURATION_THRESHOLDS.HIGH) {
+    return {
+      color: COLORS.HIGH_SATURATION,
+      bgColor: 'rgba(231, 76, 60, 0.1)',
+      level: 'High',
+      range: '>0.9'
+    };
+  } else if (saturation >= SATURATION_THRESHOLDS.MEDIUM) {
+    return {
+      color: COLORS.MEDIUM_SATURATION,
+      bgColor: 'rgba(243, 156, 18, 0.1)',
+      level: 'Medium',
+      range: '0.7-0.9'
+    };
+  } else {
+    return {
+      color: COLORS.LOW_SATURATION,
+      bgColor: 'rgba(39, 174, 96, 0.1)',
+      level: 'Low',
+      range: '<0.7'
+    };
+  }
+}
+
+// Helper function to get saturation color for UMAP visualization
+function getSaturationColor(saturation: number): string {
+  return getSaturationColors(saturation).color;
+}
+
+// Helper function to create UMAP legend HTML
+function createUMAPLegend(): string {
+  const legendItems = [
+    {
+      color: COLORS.LOW_SATURATION,
+      border: COLORS.LOW_SATURATION_BORDER,
+      label: 'Low (&lt;0.7)'
+    },
+    {
+      color: COLORS.MEDIUM_SATURATION,
+      border: COLORS.MEDIUM_SATURATION_BORDER,
+      label: 'Medium (0.7-0.9)'
+    },
+    {
+      color: COLORS.HIGH_SATURATION,
+      border: COLORS.HIGH_SATURATION_BORDER,
+      label: 'High (&gt;0.9)'
+    }
+  ];
+
+  const itemsHtml = legendItems.map(item => `
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <div style="width: 12px; height: 12px; background-color: ${item.color}; border-radius: 50%; border: 1px solid ${item.border};"></div>
+      <span style="font-size: 13px; color: ${COLORS.TEXT_PRIMARY};">${item.label}</span>
+    </div>
+  `).join('');
+
+  return `
+    <div id="umap-legend" style="margin: 15px auto; text-align: center; max-width: 600px;">
+      <div style="display: inline-flex; gap: 25px; align-items: center; background-color: ${COLORS.BACKGROUND}; padding: 15px 25px; border-radius: 10px; border: 1px solid ${COLORS.BORDER}; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <span style="font-weight: 600; color: ${COLORS.TEXT_PRIMARY}; margin-right: 10px;">Saturation Levels:</span>
+        ${itemsHtml}
+      </div>
+    </div>
+  `;
+}
+
 function fake_year_saturation(title: string, saturation: number) {
   let data_x = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
   // generate fake data from 0.1 to saturattion. it should be the same length as data_y and monotonous increasing
@@ -44,7 +137,7 @@ function fake_year_saturation(title: string, saturation: number) {
       position: "right"
     },
     color: {
-      pattern: ["#e74c3c", "#27ae60"]
+      pattern: [COLORS.HIGH_SATURATION, COLORS.LOW_SATURATION]
     }
   });
 }
@@ -114,18 +207,7 @@ function redo_task_saturation(data_saturation) {
         render: function (data, type, row) {
           if (type === 'display') {
             // Calculate color based on saturation
-            let color = '';
-            let bgColor = '';
-            if (data > 0.9) {
-              color = '#e74c3c';
-              bgColor = 'rgba(231, 76, 60, 0.1)';
-            } else if (data >= 0.7) {
-              color = '#f39c12';
-              bgColor = 'rgba(243, 156, 18, 0.1)';
-            } else {
-              color = '#27ae60';
-              bgColor = 'rgba(39, 174, 96, 0.1)';
-            }
+            const { color, bgColor } = getSaturationColors(data);
 
             return `<div style="display: flex; align-items: center; justify-content: center;">
                       <div style="background-color: ${bgColor}; padding: 4px 12px; border-radius: 20px; border: 1px solid ${color};">
@@ -295,8 +377,8 @@ function redo_task_saturation(data_saturation) {
     $(this).addClass('selected');
   });
 
-  // Generate initial UMAP visualization
-  updateUMAPVisualization(data_saturation);
+  // Generate initial UMAP visualization with table data
+  updateUMAPVisualization(tableData);
 
   // Update UMAP when DataTable is redrawn (filtered/sorted)
   dataTable.on('draw', function () {
@@ -372,21 +454,35 @@ function updateUMAPFromDataTable() {
   // Get currently visible rows from DataTable
   const visibleData = dataTable.rows({ search: 'applied' }).data().toArray();
 
-  // Filter projections based on visible data
+  // Update UMAP visualization with current table data (includes transformed saturation values)
   updateUMAPVisualization(visibleData);
 }
 
-async function updateUMAPVisualization(filteredData = null) {
+async function updateUMAPVisualization(tableData = null) {
   try {
     // Load pre-computed projections
     const response = await fetch('data/projections.json');
     const projections = await response.json();
 
+    // Create a map of current saturation values from table data (transformed/filtered data)
+    const currentSaturationMap = new Map();
+    if (tableData && Array.isArray(tableData)) {
+      tableData.forEach(row => {
+        currentSaturationMap.set(row.dataset, row.saturation);
+      });
+    }
+
+    // Update projections with current saturation values and filter if needed
+    let visibleProjections = projections.map(proj => ({
+      ...proj,
+      // Use current saturation from table data if available, otherwise keep original
+      saturation: currentSaturationMap.has(proj.name) ? currentSaturationMap.get(proj.name) : proj.saturation
+    }));
+
     // Filter projections if filtered data is provided
-    let visibleProjections = projections;
-    if (filteredData && Array.isArray(filteredData)) {
-      const visibleDatasets = new Set(filteredData.map(row => row.dataset));
-      visibleProjections = projections.filter(proj => visibleDatasets.has(proj.name));
+    if (tableData && Array.isArray(tableData)) {
+      const visibleDatasets = new Set(tableData.map(row => row.dataset));
+      visibleProjections = visibleProjections.filter(proj => visibleDatasets.has(proj.name));
     }
 
     // Need at least 2 data points for visualization
@@ -399,6 +495,9 @@ async function updateUMAPVisualization(filteredData = null) {
     if (umapChart) {
       umapChart.destroy();
     }
+
+    // Create color mapping based on saturation levels
+    const colors = visibleProjections.map(d => getSaturationColor(d.saturation));
 
     umapChart = bb.generate({
       bindto: "#cluster_chart_container",
@@ -414,6 +513,11 @@ async function updateUMAPVisualization(filteredData = null) {
           ["dataset_x", ...visibleProjections.map(d => d.x)],
           ["dataset", ...visibleProjections.map(d => d.y)],
         ],
+        colors: {
+          dataset: function(d) {
+            return colors[d.index];
+          }
+        },
         onclick: function (d) {
           const data_point = visibleProjections[d.index];
           fake_year_saturation(`${data_point.task} / ${data_point.name}`, data_point.saturation)
@@ -422,7 +526,11 @@ async function updateUMAPVisualization(filteredData = null) {
       tooltip: {
         contents: function (d) {
           const data_point = visibleProjections[d[0].index];
-          return `<span class="umap_tooltip">${data_point.task} / ${data_point.name}<span>`;
+          const { level } = getSaturationColors(data_point.saturation);
+          return `<div class="umap_tooltip">
+                    <strong>${data_point.task} / ${data_point.name}</strong><br/>
+                    Saturation: ${data_point.saturation.toFixed(2)} (${level})
+                  </div>`;
         }
       },
       axis: {
@@ -439,16 +547,23 @@ async function updateUMAPVisualization(filteredData = null) {
           },
         }
       },
-      color: {
-        pattern: ["#e74c3c"]
-      },
       legend: {
         show: false,
       },
       title: {
-        text: `UMAP Visualization (${visibleProjections.length} datasets)`
+        text: `Dataset Clustering by Saturation Level (${visibleProjections.length} datasets)`
       }
     });
+
+    // Add color legend after chart
+    const legendHtml = createUMAPLegend();
+    
+    // Remove existing legend if present
+    $('#umap-legend').remove();
+    
+    // Add legend after the chart container
+    $('#cluster_chart_container').after(legendHtml);
+
   } catch (error) {
     console.error('Error loading projections:', error);
     $('#cluster_chart_container').html('<p style="text-align: center; color: #666;">Error loading UMAP visualization</p>');

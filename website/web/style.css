@@ -689,9 +689,19 @@ table.dataTable thead .sorting_desc:before {
     display: none; /* Hide tick lines */
 }
 
+/* UMAP tooltip styling - consistent with design system */
 .umap_tooltip {
-    background-color: #fff9;
-    font-size: 10pt;
+    background-color: rgba(44, 62, 80, 0.95); /* TEXT_PRIMARY with opacity */
+    color: white;
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 200px;
+    text-align: left;
+    font-family: 'Noto Sans', sans-serif;
+    line-height: 1.4;
 }
 
 #loader {
