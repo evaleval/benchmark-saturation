@@ -1,5 +1,5 @@
 from typing import Dict
-from ..base import Metric, Benchmark
+from analyzer.src.metrics.base import Metric, Benchmark
 
 
 class StaticMetric(Metric):

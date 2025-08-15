@@ -8,12 +8,11 @@ This module demonstrates how to use the metrics architecture to:
 """
 
 import pandas as pd
-import csv
 from typing import List, Dict, Any
-from .base import Benchmark
-from .static.base import StaticMetric
-from .dynamic.base import UpdatableMetric
-from .examples import (
+from analyzer.src.metrics.base import Benchmark
+from analyzer.src.metrics.static.base import StaticMetric
+from analyzer.src.metrics.dynamic.base import UpdatableMetric
+from analyzer.src.metrics.examples import (
     ExampleBenchmark, 
     NumSamplesMetric, 
     AvgTextLengthMetric, 
