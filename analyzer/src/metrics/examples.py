@@ -7,9 +7,9 @@ and how to use them together.
 
 import pandas as pd
 from typing import Any, Optional
-from .base import Benchmark, Metric
-from .static.base import StaticMetric
-from .dynamic.base import UpdatableMetric
+from analyzer.src.metrics.base import Benchmark 
+from analyzer.src.metrics.static.base import StaticMetric
+from analyzer.src.metrics.dynamic.base import UpdatableMetric
 
 
 # ============================================================================
