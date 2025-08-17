@@ -12,9 +12,11 @@ class Benchmark(ABC):
     from external sources.
     """
     
-    def __init__(self, paper_url: Optional[str] = None, dataset_url: Optional[str] = None):
+    def __init__(self, dataset_name: str, paper_url: Optional[str] = None, dataset_url: Optional[str] = None, ds_id: Optional[str] = None):
+        self.dataset_name = dataset_name
         self.paper_url = paper_url
         self.dataset_url = dataset_url
+        self.ds_id = ds_id
         self._data: Optional[pd.DataFrame] = None
     
     @abstractmethod

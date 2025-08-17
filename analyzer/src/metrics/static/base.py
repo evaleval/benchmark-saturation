@@ -56,5 +56,4 @@ class StaticMetric(Metric):
         Returns:
             str: Unique identifier
         """
-        # Default implementation - subclasses can override
-        return f"{benchmark.__class__.__name__}_{id(benchmark)}"
+        return benchmark.ds_id
