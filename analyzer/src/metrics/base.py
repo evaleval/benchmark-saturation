@@ -14,15 +14,15 @@ class Dataset(ABC):
     
     def __init__(self, 
                  name: str,
+                 description: str = "",
                  paper_url: Optional[str] = None, 
                  dataset_url: Optional[str] = None,
-                 hf_dataset_id: Optional[str] = None,
-                 description: str = ""):
+                 hf_dataset_id: Optional[str] = None):
         self.name = name
+        self.description = description
         self.paper_url = paper_url
         self.dataset_url = dataset_url
         self.hf_dataset_id = hf_dataset_id
-        self.description = description
         self._data: Optional[pd.DataFrame] = None
     
     @abstractmethod
