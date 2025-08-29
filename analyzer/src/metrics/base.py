@@ -209,9 +209,10 @@ class Metric(ABC):
         Returns:
             float: The metric score
         """
-        result = self.run(dataset)
-        if isinstance(result, dict):
-            raise ValueError("run_on_dataset should return a single float")
+            raise ValueError(
+                "Expected run() to return a float for single dataset, but got dict. "
+                "Use run_on_leaderboard() for multi-dataset operations."
+            )
         return result
     
     def run_on_leaderboard(self, leaderboard: Leaderboard) -> Dict[str, float]:
