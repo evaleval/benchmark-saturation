@@ -20,6 +20,7 @@ Examples:
 import sys
 import yaml
 
+
 def print_first_n_yaml_docs(filepath, n=5):
     with open(filepath, "r") as f:
         for i, doc in enumerate(yaml.safe_load_all(f)):
@@ -28,6 +29,7 @@ def print_first_n_yaml_docs(filepath, n=5):
             print(f"--- Document {i+1} (ALL DATA) ---")
             print(yaml.dump(doc, sort_keys=False, indent=2, allow_unicode=True))
             print()
+
 
 def print_first_n_card_parsed(filepath, n=5):
     """
@@ -44,16 +46,25 @@ def print_first_n_card_parsed(filepath, n=5):
             print(f"--- Document {i+1} (card_parsed) ---")
             card_parsed = doc.get("card_parsed", None)
             if card_parsed is not None:
-                print(yaml.dump(card_parsed, sort_keys=False, indent=2, allow_unicode=True))
+                print(
+                    yaml.dump(
+                        card_parsed, sort_keys=False, indent=2, allow_unicode=True
+                    )
+                )
             else:
                 print("No card_parsed data found.")
             print()
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python read_all_dataset_info.py <split_number|yaml_file>")
-        print("  Example: python read_all_dataset_info.py 1   # interactively choose what to print from part 1")
-        print("  Example: python read_all_dataset_info.py split_yaml/all_dataset_info_part2.yaml")
+        print(
+            "  Example: python read_all_dataset_info.py 1   # interactively choose what to print from part 1"
+        )
+        print(
+            "  Example: python read_all_dataset_info.py split_yaml/all_dataset_info_part2.yaml"
+        )
     else:
         arg = sys.argv[1]
         if arg.isdigit():
@@ -70,7 +81,12 @@ if __name__ == "__main__":
             except ValueError:
                 print("Please enter a valid integer.")
         while True:
-            choice = input("Show (a)ll data or only (c)ards? [a/c, default a]: ").strip().lower() or "a"
+            choice = (
+                input("Show (a)ll data or only (c)ards? [a/c, default a]: ")
+                .strip()
+                .lower()
+                or "a"
+            )
             if choice in ("a", "c"):
                 break
             print("Please enter 'a' or 'c'.")
@@ -79,6 +95,7 @@ if __name__ == "__main__":
         else:
             print_first_n_card_parsed(yaml_file, n)
 
+
 def main():
     """
     Main interactive entry point for the script.
@@ -86,8 +103,12 @@ def main():
     """
     if len(sys.argv) < 2:
         print("Usage: python read_all_dataset_info.py <split_number|yaml_file>")
-        print("  Example: python read_all_dataset_info.py 1   # interactively choose what to print from part 1")
-        print("  Example: python read_all_dataset_info.py split_yaml/all_dataset_info_part2.yaml")
+        print(
+            "  Example: python read_all_dataset_info.py 1   # interactively choose what to print from part 1"
+        )
+        print(
+            "  Example: python read_all_dataset_info.py split_yaml/all_dataset_info_part2.yaml"
+        )
         return
     arg = sys.argv[1]
     if arg.isdigit():
@@ -104,7 +125,10 @@ def main():
         except ValueError:
             print("Please enter a valid integer.")
     while True:
-        choice = input("Show (a)ll data or only (c)ards? [a/c, default a]: ").strip().lower() or "a"
+        choice = (
+            input("Show (a)ll data or only (c)ards? [a/c, default a]: ").strip().lower()
+            or "a"
+        )
         if choice in ("a", "c"):
             break
         print("Please enter 'a' or 'c'.")
@@ -112,6 +136,7 @@ def main():
         print_first_n_yaml_docs(yaml_file, n)
     else:
         print_first_n_card_parsed(yaml_file, n)
+
 
 if __name__ == "__main__":
     main()

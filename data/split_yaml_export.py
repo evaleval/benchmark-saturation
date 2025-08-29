@@ -1,4 +1,3 @@
-
 import os
 import yaml
 from datasets import load_dataset
@@ -26,11 +25,11 @@ for entry in tqdm(ds["train"], desc="Parsing entries"):
 num_files = (len(entries) + ENTRIES_PER_FILE - 1) // ENTRIES_PER_FILE
 print("Saving chunks:")
 for i in range(num_files):
-    chunk = entries[i*ENTRIES_PER_FILE:(i+1)*ENTRIES_PER_FILE]
+    chunk = entries[i * ENTRIES_PER_FILE : (i + 1) * ENTRIES_PER_FILE]
     out_path = os.path.join(OUTPUT_DIR, f"all_dataset_info_part{i+1}.yaml")
     with open(out_path, "w") as f:
         for doc in chunk:
             yaml.dump(doc, f, sort_keys=False, indent=2)
-            f.write('---\n')
+            f.write("---\n")
     print(".", end="", flush=True)
 print(f"\nDone! {num_files} files created in {OUTPUT_DIR}")
