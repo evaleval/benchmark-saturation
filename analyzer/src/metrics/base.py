@@ -16,10 +16,12 @@ class Dataset(ABC):
                  name: str,
                  paper_url: Optional[str] = None, 
                  dataset_url: Optional[str] = None,
+                 hf_dataset_id: Optional[str] = None,
                  description: str = ""):
         self.name = name
         self.paper_url = paper_url
         self.dataset_url = dataset_url
+        self.hf_dataset_id = hf_dataset_id
         self.description = description
         self._data: Optional[pd.DataFrame] = None
     
