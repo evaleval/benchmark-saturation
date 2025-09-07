@@ -3,11 +3,7 @@ from analyzer.src.metrics.base import Dataset, Leaderboard
 from typing import Union, Dict
 
 
-class IsPublicMetric(StaticMetric):
-    """
-    IsPublicMetric (metric used for evaluation of the dataset benchmark, e.g. BLEU, F1 etc) for these datasets.
-    """
-
+class TotalLenDatasetMetric(StaticMetric):
     def __init__(self, name: str, description: str = ""):
         super().__init__(name, description)
 
@@ -16,7 +12,7 @@ class IsPublicMetric(StaticMetric):
         if data is None:
             return "No data available"
 
-        return bool(data.iloc[0]["is_public"])
+        return int(data.iloc[0]["total_samples"])
 
     def run_on_dataset(self, dataset: Dataset) -> Union[float, str]:
         return self._compute(dataset)

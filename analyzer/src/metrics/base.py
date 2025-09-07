@@ -19,6 +19,7 @@ class Dataset(ABC):
         paper_url: Optional[str] = None,
         dataset_url: Optional[str] = None,
         hf_dataset_id: Optional[str] = None,
+        **kwargs,
     ):
         self.name = name
         self.description = description
@@ -93,7 +94,7 @@ class Leaderboard(ABC):
     and analyze them collectively.
     """
 
-    def __init__(self, name: str, description: str = ""):
+    def __init__(self, name: str, description: str = "", **kwargs):
         self.name = name
         self.description = description
         self._datasets: Dict[str, Dataset] = {}
