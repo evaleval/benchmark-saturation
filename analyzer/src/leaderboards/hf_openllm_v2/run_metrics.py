@@ -5,8 +5,15 @@ from analyzer.src.metrics.static.total_len_dataset_metric import TotalLenDataset
 from analyzer.src.metrics.static.leaderboard_detail_metric import LeaderboardDetailMetric
 from analyzer.src.leaderboards.hf_openllm_v2.bigbench_hard_dataset import BigBenchHard
 from analyzer.src.leaderboards.hf_openllm_v2.benchmark import HFOpenLLMVB2Leaderboard
+from analyzer.src.leaderboards.hf_openllm_v2.gpqa_dataset import GPQADataset
+from analyzer.src.leaderboards.hf_openllm_v2.mmlu_pro_dataset import MMLUProDataset
+from analyzer.src.leaderboards.hf_openllm_v2.musr_dataset import MUSDDataset
+from analyzer.src.leaderboards.hf_openllm_v2.ifeval_dataset import IFEvalDataset
+from analyzer.src.leaderboards.hf_openllm_v2.hendrycks_math_dataset import HendrycksMathDataset
+
 
 def run_metrics():
+
     bigbench_hard_dataset = BigBenchHard(
         name="bigbench_hard",
         paper_url="https://arxiv.org/abs/2210.09261",
@@ -14,6 +21,8 @@ def run_metrics():
         hf_dataset_id="maveriq/bigbenchhard",
         static_data_path="data/all_datasets.json",
     )
+
+
     static_data = bigbench_hard_dataset.download()['maveriq/bigbenchhard']
     bigbench_hard_dataset.process(static_data)
 
@@ -23,6 +32,7 @@ def run_metrics():
         dataset_url="https://huggingface.co/datasets/maveriq/bigbenchhard",
         hf_dataset_id="maveriq/bigbenchhard",
     )
+
     leaderboard.add_dataset(bigbench_hard_dataset)
 
     all_metrics = [
