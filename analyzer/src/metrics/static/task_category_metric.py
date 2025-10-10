@@ -3,7 +3,7 @@ from analyzer.src.metrics.base import Dataset, Leaderboard
 from typing import Union, Dict
 
 
-class LeaderboardDetailMetric(StaticMetric):
+class TaskCategoryMetric(StaticMetric):
     def __init__(self, name: str, description: str = ""):
         super().__init__(name, description)
 
@@ -12,9 +12,7 @@ class LeaderboardDetailMetric(StaticMetric):
         if data is None:
             return "No data available"
 
-        return data.iloc[0][
-            "leaderboard_detail"
-        ]  # Format will be leaderboard_name and link to leaderboard
+        return int(data.iloc[0]["task_categories"])
 
     def run_on_dataset(self, dataset: Dataset) -> Union[float, str]:
         return self._compute(dataset)

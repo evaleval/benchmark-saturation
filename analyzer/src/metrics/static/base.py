@@ -1,5 +1,5 @@
 from typing import Dict
-from analyzer.src.metrics.base import Metric, Benchmark
+from analyzer.src.metrics.base import Metric, Leaderboard
 from typing import Union
 
 
@@ -15,7 +15,7 @@ class StaticMetric(Metric):
         super().__init__(name, description)
         self._computed_values: Dict[str, float] = {}
 
-    def run(self, benchmark: Benchmark) -> float:
+    def run(self, leaderboard: Leaderboard) -> float:
         """
         Run the static metric on a benchmark.
 
@@ -26,36 +26,36 @@ class StaticMetric(Metric):
             float: The static metric score
         """
         # Check if we've already computed this value
-        benchmark_id = self._get_benchmark_id(benchmark)
-        if benchmark_id in self._computed_values:
-            return self._computed_values[benchmark_id]
+        leaderboard_id = self._get_leaderboard_id(leaderboard)
+        if leaderboard_id in self._computed_values:
+            return self._computed_values[leaderboard_id]
 
         # Compute the value
-        score = self._compute(benchmark)
-        self._computed_values[benchmark_id] = score
+        score = self._compute(leaderboard)
+        self._computed_values[leaderboard_id] = score
         return score
 
-    def _compute(self, benchmark: Benchmark) -> Union[float, str]:
+    def _compute(self, leaderboard: Leaderboard) -> Union[float, str]:
         """
         Compute the static metric value.
 
         Args:
-            benchmark: The benchmark to analyze
+            leaderboard: The leaderboard to analyze
 
         Returns:
             float: The computed metric score
         """
         raise NotImplementedError("Subclasses must implement _compute")
 
-    def _get_benchmark_id(self, benchmark: Benchmark) -> str:
+    def _get_leaderboard_id(self, leaderboard: Leaderboard) -> str:
         """
         Get a unique identifier for the benchmark.
 
         Args:
-            benchmark: The benchmark
+            leaderboard: The leaderboard
 
         Returns:
             str: Unique identifier
         """
         # Default implementation - subclasses can override
-        return f"{benchmark.__class__.__name__}_{id(benchmark)}"
+        return f"{leaderboard.__class__.__name__}_{id(leaderboard)}"

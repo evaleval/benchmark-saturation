@@ -1,8 +1,8 @@
-# Benchmark Analyzer
+# Leaderboard Analyzer
 
 The scripts for Team 3's (infrastructure) work.
 
-A series of metrics, implemented in python, which transform an input csv of benchmark information (chiefly links to hf repos and downloads, other metadata) into additional csv rows in place.
+A series of metrics, implemented in python, which transform an input csv of Leaderboard information (chiefly links to hf repos and downloads, other metadata) into additional csv rows in place.
 
 "Metric" here is an abstraction that represents any *number* generated from a dataset or leaderboard. This can include live checks of citation counts, etc.
 
@@ -14,10 +14,10 @@ To add a new dataset to the system, follow these steps:
 
 ### 1. Create a Dataset Folder
 
-Create a new folder under `src/benchmarks/` with your dataset name:
+Create a new folder under `src/leaderboards/` with your dataset name:
 
 ```bash
-mkdir -p src/benchmarks/your_dataset_name
+mkdir -p src/leaderboards/your_dataset_name
 ```
 
 ### 2. Implement Your Dataset Class
