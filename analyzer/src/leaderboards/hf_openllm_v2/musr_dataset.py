@@ -35,7 +35,7 @@ class MUSRDataset(Dataset):
             modality = "text"
         if modality is None:
             modality = "text"
-        
+
         task_categories = data.get("task_categories")
         data_created = data.get("createdAt")
         data_configs = ["murder_mysteries", "object_placements", "team_allocation"]

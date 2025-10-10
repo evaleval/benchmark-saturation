@@ -32,7 +32,7 @@ class HendrycksMathDataset(Dataset):
         modality = data.get("modality_from_tags")
         if modality is None:
             modality = "text"
-        
+
         task_categories = data.get("task_categories")
         data_created = data.get("createdAt")
         data_len = load_dataset(self.hf_dataset_id, split="train")

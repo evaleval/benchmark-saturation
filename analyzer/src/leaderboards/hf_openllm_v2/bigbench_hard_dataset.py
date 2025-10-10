@@ -42,9 +42,9 @@ class BigBenchHardDataset(Dataset):
         modality = data.get("modality_from_tags")
         if modality is None:
             modality = "text"
-        
+
         task_categories = data.get("task_categories")
-        
+
         data_created = data.get("createdAt")
 
         dataset_configs = [

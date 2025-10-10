@@ -2,6 +2,7 @@ from analyzer.src.metrics.static.modality_detail_metric import ModalityMetric
 from analyzer.src.metrics.static.is_public_metric import IsPublicMetric
 from analyzer.src.metrics.static.language_metric import LanguageMetric
 from analyzer.src.metrics.static.total_len_dataset_metric import TotalLenDatasetMetric
+from analyzer.src.metrics.static.task_category_metric import TaskCategoryMetric
 from analyzer.src.metrics.static.leaderboard_detail_metric import (
     LeaderboardDetailMetric,
 )
@@ -46,6 +47,7 @@ def run_metrics():
         LanguageMetric(name="language"),
         IsPublicMetric(name="is_public"),
         LeaderboardDetailMetric(name="leaderboard_detail"),
+        TaskCategoryMetric(name="task_categories"),
     ]
     all_metric_results = {}
     for metric in all_metrics:
