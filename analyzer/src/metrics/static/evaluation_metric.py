@@ -20,8 +20,10 @@ class EvaluationMetric(StaticMetric):
 
     def run_on_dataset(self, dataset: Dataset) -> Union[float, str]:
         return self._compute(dataset)
-    
-    def run_on_leaderboard(self, leaderboard: Leaderboard) -> Dict[str, Union[float, str]]:
+
+    def run_on_leaderboard(
+        self, leaderboard: Leaderboard
+    ) -> Dict[str, Union[float, str]]:
         datasets = leaderboard.datasets
         leaderboard_results = {}
         for dataset_name, dataset in datasets.items():

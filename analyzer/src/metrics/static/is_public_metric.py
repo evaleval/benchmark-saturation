@@ -20,12 +20,14 @@ class IsPublicMetric(StaticMetric):
 
     def run_on_dataset(self, dataset: Dataset) -> Union[float, str]:
         return self._compute(dataset)
-    
-    def run_on_leaderboard(self, leaderboard: Leaderboard) -> Dict[str, Union[float, str]]:
+
+    def run_on_leaderboard(
+        self, leaderboard: Leaderboard
+    ) -> Dict[str, Union[float, str]]:
         datasets = leaderboard.datasets
         leaderboard_results = {}
         for dataset_name, dataset in datasets.items():
             dataset_result = self._compute(dataset)
             leaderboard_results[dataset_name] = dataset_result
-        
+
         return leaderboard_results

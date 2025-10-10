@@ -5,14 +5,14 @@ from datasets import load_dataset
 import pandas as pd
 
 
-class BigBenchHard(Dataset):
+class BigBenchHardDataset(Dataset):
     def __init__(
         self,
         name: str,
         paper_url: Optional[str] = None,
         dataset_url: Optional[str] = None,
         hf_dataset_id: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(name, paper_url, dataset_url, hf_dataset_id, **kwargs)
         self.static_data_path = kwargs.get("static_data_path")
@@ -35,13 +35,16 @@ class BigBenchHard(Dataset):
         """
         paper_url = self.paper_url
         dataset_url = self.dataset_url
-        language = data.get("language")
+        language = data.get("language_from_tags")
         if language is None:
             language = "en"
         is_public = True
-        modality = data.get("modality")
+        modality = data.get("modality_from_tags")
         if modality is None:
             modality = "text"
+        
+        task_categories = data.get("task_categories")
+        
         data_created = data.get("createdAt")
 
         dataset_configs = [
@@ -92,6 +95,7 @@ class BigBenchHard(Dataset):
                 "data_created": [data_created],
                 "leaderboard_detail": [leaderboard_detail],
                 "total_samples": [total_len],
+                "task_categories": [task_categories],
             }
         )
         print(final_df)
