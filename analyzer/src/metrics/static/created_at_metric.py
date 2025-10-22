@@ -3,7 +3,7 @@ from analyzer.src.metrics.base import Dataset, Leaderboard
 from typing import Union, Dict
 
 
-class TotalLenDatasetMetric(StaticMetric):
+class CreatedAtMetric(StaticMetric):
     def __init__(self, name: str, description: str = ""):
         super().__init__(name, description)
 
@@ -11,7 +11,7 @@ class TotalLenDatasetMetric(StaticMetric):
         data = dataset.data
         if data is None:
             return "No data available"
-        return int(data.iloc[0]["total_samples"])
+        return data.iloc[0]["data_created"]
 
     def run_on_dataset(self, dataset: Dataset) -> Union[float, str]:
         return self._compute(dataset)
@@ -24,5 +24,4 @@ class TotalLenDatasetMetric(StaticMetric):
         for dataset_name, dataset in datasets.items():
             dataset_result = self._compute(dataset)
             leaderboard_results[dataset_name] = dataset_result
-
         return leaderboard_results

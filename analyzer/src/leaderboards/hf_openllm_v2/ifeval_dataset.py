@@ -20,6 +20,9 @@ class IFEvalDataset(Dataset):
             all_datasets = json.load(f)
         return all_datasets
 
+    def refresh(self) -> None:
+        pass
+
     def process(self, data):
         paper_url = self.paper_url
         dataset_url = self.dataset_url
@@ -33,7 +36,7 @@ class IFEvalDataset(Dataset):
 
         task_categories = data.get("task_categories")
         data_created = data.get("createdAt")
-        data_len = load_dataset(self.hf_dataset_id, split="train")
+        data_len = len(load_dataset(self.hf_dataset_id, split="train"))
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
             {
@@ -48,4 +51,5 @@ class IFEvalDataset(Dataset):
                 "task_categories": [task_categories],
             }
         )
+        self._data = final_df
         return final_df

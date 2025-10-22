@@ -3,6 +3,7 @@ from typing import Optional, Any, Dict
 import json
 import pandas as pd
 from datasets import load_dataset
+from datetime import datetime
 
 
 """
@@ -27,6 +28,9 @@ class GPQADataset(Dataset):
             all_datasets = json.load(f)
         return all_datasets
 
+    def refresh(self) -> None:
+        pass
+
     def process(self, data: Dict[str, Any]):
         paper_url = self.paper_url
         dataset_url = self.dataset_url
@@ -40,8 +44,11 @@ class GPQADataset(Dataset):
             modality = "text"
 
         task_categories = data.get("task_categories")
+        if task_categories is None:
+            task_categories = ["question-answering", "text-generation"]
         data_created = data.get("createdAt")
-
+        if data_created is None:
+            data_created = datetime.now().strftime("%Y-%m-%d")
         configs = ["gpqa_extended", "gpqa_main", "gpqa_diamond", "gpqa_experts"]
 
         total_len = 0
@@ -62,4 +69,5 @@ class GPQADataset(Dataset):
                 "task_categories": [task_categories],
             }
         )
+        self._data = final_df
         return final_df
