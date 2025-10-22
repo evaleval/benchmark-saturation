@@ -107,12 +107,15 @@ def test_single_dataset():
     print(f"Static Metrics:  {len([v for v in static_results.values() if v is not None])}/{len(static_metrics)} passed")
     print(f"Dynamic Metrics: {len([v for v in dynamic_results.values() if v is not None])}/{len(dynamic_metrics)} passed")
     
-    # Show dataset data
+    # Show ALL fields from the DataFrame
     print("\n" + "=" * 60)
-    print("Dataset DataFrame Preview")
+    print("All DataFrame Fields")
     print("=" * 60)
     if banking77_dataset.data is not None:
-        print(banking77_dataset.data.to_string())
+        df = banking77_dataset.data
+        for col in df.columns:
+            value = df[col].iloc[0]
+            print(f"  {col:20s} = {value}")
     else:
         print("No data available")
     
