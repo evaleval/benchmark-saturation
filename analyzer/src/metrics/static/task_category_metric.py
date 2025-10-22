@@ -12,7 +12,7 @@ class TaskCategoryMetric(StaticMetric):
         if data is None:
             return "No data available"
 
-        return int(data.iloc[0]["task_categories"])
+        return data.iloc[0]["task_categories"]
 
     def run_on_dataset(self, dataset: Dataset) -> Union[float, str]:
         return self._compute(dataset)

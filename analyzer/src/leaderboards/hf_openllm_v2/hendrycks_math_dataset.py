@@ -17,6 +17,9 @@ class HendrycksMathDataset(Dataset):
         self.paper_url = paper_url
         self.dataset_url = dataset_url
 
+    def refresh(self) -> None:
+        pass
+
     def download(self):
         with open(self.static_data_path, "r") as f:
             all_datasets = json.load(f)
@@ -35,7 +38,18 @@ class HendrycksMathDataset(Dataset):
 
         task_categories = data.get("task_categories")
         data_created = data.get("createdAt")
-        data_len = load_dataset(self.hf_dataset_id, split="train")
+        configs = [
+            "algebra",
+            "counting_and_probability",
+            "geometry",
+            "intermediate_algebra",
+            "number_theory",
+            "prealgebra",
+            "precalculus",
+        ]
+        data_len = 0
+        for config in configs:
+            data_len += len(load_dataset(self.hf_dataset_id, config))
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
             {
@@ -50,4 +64,5 @@ class HendrycksMathDataset(Dataset):
                 "task_categories": [task_categories],
             }
         )
+        self._data = final_df
         return final_df
