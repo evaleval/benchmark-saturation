@@ -135,7 +135,6 @@ See `analyzer/src/metrics/dynamic/HELM_DYNAMIC_METRICS.md` for detailed document
 To run all HELM metrics:
 
 ```bash
-cd /Users/srishtiy/dev/benchmark-saturation
 python3 -m analyzer.src.leaderboards.helm.run_metrics
 ```
 
@@ -168,11 +167,4 @@ Required packages (from `analyzer/requirements.txt`):
 3. **Configuration handling**: Datasets with multiple configurations (e.g., `legalbench`, `openbookqa`, `wmt14`) handle the primary configuration
 4. **Leaderboard categories**: Each dataset is tagged with its HELM category (Lite, Capabilities, or Finance) via the `leaderboard_detail` field
 
-## Future Extensions
 
-Potential improvements:
-- Add dynamic metrics for tracking downloads, citations over time
-- Implement more sophisticated ranking algorithms in `compute_rankings()`
-- Add support for loading all configurations of multi-config datasets
-- Integrate with actual HELM evaluation pipeline
-- Add unit tests for each dataset class
