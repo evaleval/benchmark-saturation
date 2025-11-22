@@ -1,5 +1,5 @@
-from typing import Dict
-from analyzer.src.metrics.base import Metric, Benchmark
+from typing import Dict, Union
+from analyzer.src.metrics.base import Metric, Leaderboard
 
 
 class UpdatableMetric(Metric):
@@ -17,76 +17,76 @@ class UpdatableMetric(Metric):
         self.update_frequency_days = update_frequency_days
         self._historical_values: Dict[str, Dict[str, float]] = (
             {}
-        )  # benchmark_id -> {timestamp: value}
+        )  # leaderboard_id -> {timestamp: value}
 
-    def run(self, benchmark: Benchmark) -> float:
+    def run(self, leaderboard: Leaderboard) -> float:
         """
-        Run the updatable metric on a benchmark.
+        Run the updatable metric on a leaderboard.
 
         Args:
-            benchmark: The benchmark to analyze
+            leaderboard: The leaderboard to analyze
 
         Returns:
             float: The current metric score
         """
-        benchmark_id = self._get_benchmark_id(benchmark)
-        current_value = self._compute_current(benchmark)
+        leaderboard_id = self._get_leaderboard_id(leaderboard)
+        current_value = self._compute_current(leaderboard)
 
         # Store the historical value
-        if benchmark_id not in self._historical_values:
-            self._historical_values[benchmark_id] = {}
+        if leaderboard_id not in self._historical_values:
+            self._historical_values[leaderboard_id] = {}
 
         import datetime
 
         timestamp = datetime.datetime.now().isoformat()
-        self._historical_values[benchmark_id][timestamp] = current_value
+        self._historical_values[leaderboard_id][timestamp] = current_value
 
         return current_value
 
-    def _compute_current(self, benchmark: Benchmark) -> float:
+    def _compute_current(self, leaderboard: Leaderboard) -> Union[float, str]:
         """
         Compute the current value of the updatable metric.
 
         Args:
-            benchmark: The benchmark to analyze
+            leaderboard: The leaderboard to analyze
 
         Returns:
-            float: The current metric score
+            Union[float, str]: The current metric score
         """
         raise NotImplementedError("Subclasses must implement _compute_current")
 
-    def get_historical_values(self, benchmark: Benchmark) -> Dict[str, float]:
+    def get_historical_values(self, leaderboard: Leaderboard) -> Dict[str, float]:
         """
-        Get historical values for a benchmark.
+        Get historical values for a leaderboard.
 
         Args:
-            benchmark: The benchmark
+            leaderboard: The leaderboard
 
         Returns:
             Dict[str, float]: Historical values with timestamps as keys
         """
-        benchmark_id = self._get_benchmark_id(benchmark)
-        return self._historical_values.get(benchmark_id, {})
+        leaderboard_id = self._get_leaderboard_id(leaderboard)
+        return self._historical_values.get(leaderboard_id, {})
 
-    def _get_benchmark_id(self, benchmark: Benchmark) -> str:
+    def _get_leaderboard_id(self, leaderboard: Leaderboard) -> str:
         """
-        Get a unique identifier for the benchmark.
+        Get a unique identifier for the leaderboard.
 
         Args:
-            benchmark: The benchmark
+            leaderboard: The leaderboard
 
         Returns:
             str: Unique identifier
         """
         # Default implementation - subclasses can override
-        return f"{benchmark.__class__.__name__}_{id(benchmark)}"
+        return f"{leaderboard.__class__.__name__}_{id(leaderboard)}"
 
-    def needs_update(self, benchmark: Benchmark) -> bool:
+    def needs_update(self, leaderboard: Leaderboard) -> bool:
         """
-        Check if the metric needs to be updated for this benchmark.
+        Check if the metric needs to be updated for this leaderboard.
 
         Args:
-            benchmark: The benchmark
+            leaderboard: The leaderboard
 
         Returns:
             bool: True if update is needed
@@ -94,16 +94,16 @@ class UpdatableMetric(Metric):
         # Simple implementation - can be overridden for more sophisticated logic
         import datetime
 
-        benchmark_id = self._get_benchmark_id(benchmark)
+        leaderboard_id = self._get_leaderboard_id(leaderboard)
 
-        if benchmark_id not in self._historical_values:
+        if leaderboard_id not in self._historical_values:
             return True
 
-        if not self._historical_values[benchmark_id]:
+        if not self._historical_values[leaderboard_id]:
             return True
 
         # Check if the last update was more than update_frequency_days ago
-        last_timestamp = max(self._historical_values[benchmark_id].keys())
+        last_timestamp = max(self._historical_values[leaderboard_id].keys())
         last_update = datetime.datetime.fromisoformat(last_timestamp)
         days_since_update = (datetime.datetime.now() - last_update).days
 
