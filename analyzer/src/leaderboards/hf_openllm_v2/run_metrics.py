@@ -147,7 +147,6 @@ def run_metrics():
         metric_result = metric.run_on_leaderboard(leaderboard)
         all_metric_results[metric_name] = metric_result
 
-    print("FINAL METRICS")
     print(all_metric_results)
 
     # Export to CSV using pandas
