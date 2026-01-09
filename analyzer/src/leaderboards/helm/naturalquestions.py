@@ -5,7 +5,7 @@ import pandas as pd
 from datasets import load_dataset
 
 
-class Banking77Dataset(Dataset):
+class NaturalQuestionsDataset(Dataset):
     def __init__(
         self, name: str, paper_url: str, dataset_url: str, hf_dataset_id: str, **kwargs
     ):
@@ -15,6 +15,7 @@ class Banking77Dataset(Dataset):
         self.hf_dataset_id = hf_dataset_id
         self.paper_url = paper_url
         self.dataset_url = dataset_url
+        self.config = kwargs.get("config", "default")  # "default" for closed-book, or specific config for open-book
 
     def refresh(self) -> None:
         pass
@@ -28,8 +29,7 @@ class Banking77Dataset(Dataset):
         paper_url = self.paper_url
         dataset_url = self.dataset_url
         
-        # Extract metadata from the loaded data
-        language = data.get("language_from_tags", "eng")
+        language = data.get("language_from_tags", "en")
         is_public = True
         modality = data.get("modality_from_tags", "text")
         data_created = data.get("createdAt")
@@ -42,15 +42,23 @@ class Banking77Dataset(Dataset):
         trending_score = data.get("trending_score", 0.0)
         
         # Load dataset to get total samples
+        # NaturalQuestions has different configs for closed-book vs open-book
         try:
-            train_data = load_dataset(self.hf_dataset_id, split="train")
-            test_data = load_dataset(self.hf_dataset_id, split="test")
-            total_len = len(train_data) + len(test_data)
+            if self.config == "default":
+                # Closed-book: default config
+                train_data = load_dataset(self.hf_dataset_id, split="train")
+                validation_data = load_dataset(self.hf_dataset_id, split="validation")
+                total_len = len(train_data) + len(validation_data)
+            else:
+                # Open-book: use specified config
+                train_data = load_dataset(self.hf_dataset_id, self.config, split="train")
+                validation_data = load_dataset(self.hf_dataset_id, self.config, split="validation")
+                total_len = len(train_data) + len(validation_data)
         except Exception as e:
             print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
-        leaderboard_detail = "HELM Finance"
+        leaderboard_detail = "HELM Classic"
         
         final_df = pd.DataFrame(
             {
@@ -73,3 +81,4 @@ class Banking77Dataset(Dataset):
         
         self._data = final_df
         return final_df
+

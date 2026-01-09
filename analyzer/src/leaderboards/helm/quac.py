@@ -5,7 +5,7 @@ import pandas as pd
 from datasets import load_dataset
 
 
-class OmniMathDataset(Dataset):
+class QuACDataset(Dataset):
     def __init__(
         self, name: str, paper_url: str, dataset_url: str, hf_dataset_id: str, **kwargs
     ):
@@ -34,15 +34,22 @@ class OmniMathDataset(Dataset):
         data_created = data.get("createdAt")
         task_categories = data.get("task_categories", [])
         
+        # Extract dynamic metric fields
+        downloads = data.get("downloads", 0)
+        likes = data.get("likes", 0)
+        last_modified = data.get("last_modified", "")
+        trending_score = data.get("trending_score", 0.0)
+        
         # Load dataset to get total samples
         try:
-            dataset = load_dataset(self.hf_dataset_id, split="train")
-            total_len = len(dataset)
+            train_data = load_dataset(self.hf_dataset_id, split="train")
+            validation_data = load_dataset(self.hf_dataset_id, split="validation")
+            total_len = len(train_data) + len(validation_data)
         except Exception as e:
             print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
-        leaderboard_detail = "HELM Capabilities"
+        leaderboard_detail = "HELM Classic"
         
         final_df = pd.DataFrame(
             {
@@ -55,8 +62,14 @@ class OmniMathDataset(Dataset):
                 "leaderboard_detail": [leaderboard_detail],
                 "total_samples": [total_len],
                 "task_categories": [task_categories],
+                # Dynamic metrics fields
+                "downloads": [downloads],
+                "likes": [likes],
+                "last_modified": [last_modified],
+                "trending_score": [trending_score],
             }
         )
         
         self._data = final_df
         return final_df
+

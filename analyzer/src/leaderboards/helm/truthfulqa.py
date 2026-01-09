@@ -5,7 +5,7 @@ import pandas as pd
 from datasets import load_dataset
 
 
-class WildBenchDataset(Dataset):
+class TruthfulQADataset(Dataset):
     def __init__(
         self, name: str, paper_url: str, dataset_url: str, hf_dataset_id: str, **kwargs
     ):
@@ -34,15 +34,27 @@ class WildBenchDataset(Dataset):
         data_created = data.get("createdAt")
         task_categories = data.get("task_categories", [])
         
-        # Load dataset to get total samples - WildBench has multiple configs (v2, v2-hard)
+        # Extract dynamic metric fields
+        downloads = data.get("downloads", 0)
+        likes = data.get("likes", 0)
+        last_modified = data.get("last_modified", "")
+        trending_score = data.get("trending_score", 0.0)
+        
+        # Load dataset to get total samples
         try:
-            test_data = load_dataset(self.hf_dataset_id, "v2", split="test")
-            total_len = len(test_data)
+            # TruthfulQA typically has 'default' config
+            try:
+                validation_data = load_dataset(self.hf_dataset_id, split="validation")
+                total_len = len(validation_data)
+            except:
+                # Try without config
+                validation_data = load_dataset(self.hf_dataset_id, split="validation")
+                total_len = len(validation_data)
         except Exception as e:
             print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
-        leaderboard_detail = "HELM Capabilities"
+        leaderboard_detail = "HELM Classic"
         
         final_df = pd.DataFrame(
             {
@@ -55,8 +67,14 @@ class WildBenchDataset(Dataset):
                 "leaderboard_detail": [leaderboard_detail],
                 "total_samples": [total_len],
                 "task_categories": [task_categories],
+                # Dynamic metrics fields
+                "downloads": [downloads],
+                "likes": [likes],
+                "last_modified": [last_modified],
+                "trending_score": [trending_score],
             }
         )
         
         self._data = final_df
         return final_df
+

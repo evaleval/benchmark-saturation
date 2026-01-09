@@ -12,8 +12,10 @@ def parse_yaml_files_to_json():
     """
 
     # Define paths
-    split_yaml_dir = Path("/Users/random/benchmark-saturation/data/split_yaml")
-    output_file = "all_datasets.json"
+    # Use relative path based on script location
+    script_dir = Path(__file__).parent
+    split_yaml_dir = script_dir / "split_yaml"
+    output_file = script_dir / "all_datasets.json"
 
     # Dictionary to store all datasets with datasetId as key
     all_datasets = {}
@@ -120,7 +122,7 @@ def parse_yaml_files_to_json():
     print(f"\nSaving {len(all_datasets)} datasets to {output_file}...")
 
     try:
-        with open(output_file, "w", encoding="utf-8") as f:
+        with open(str(output_file), "w", encoding="utf-8") as f:
             json.dump(all_datasets, f, indent=2, ensure_ascii=False)
 
         print(f"Successfully saved {len(all_datasets)} datasets to {output_file}")

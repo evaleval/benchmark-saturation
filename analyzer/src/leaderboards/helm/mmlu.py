@@ -5,7 +5,7 @@ import pandas as pd
 from datasets import load_dataset
 
 
-class WMT14Dataset(Dataset):
+class MMLUDataset(Dataset):
     def __init__(
         self, name: str, paper_url: str, dataset_url: str, hf_dataset_id: str, **kwargs
     ):
@@ -28,24 +28,34 @@ class WMT14Dataset(Dataset):
         paper_url = self.paper_url
         dataset_url = self.dataset_url
         
-        language = data.get("language_from_tags", ["cs", "de", "en", "fr", "hi", "ru"])
+        language = data.get("language_from_tags", "en")
         is_public = True
         modality = data.get("modality_from_tags", "text")
         data_created = data.get("createdAt")
         task_categories = data.get("task_categories", [])
         
-        # Load dataset to get total samples - WMT14 has multiple language pairs
+        # Extract dynamic metric fields
+        downloads = data.get("downloads", 0)
+        likes = data.get("likes", 0)
+        last_modified = data.get("last_modified", "")
+        trending_score = data.get("trending_score", 0.0)
+        
+        # Load dataset to get total samples
+        # MMLU has multiple subjects, we'll try to get the 'all' config or default
         try:
-            # Try loading one config to get an estimate
-            train_data = load_dataset(self.hf_dataset_id, "cs-en", split="train")
-            test_data = load_dataset(self.hf_dataset_id, "cs-en", split="test")
-            validation_data = load_dataset(self.hf_dataset_id, "cs-en", split="validation")
-            total_len = len(train_data) + len(test_data) + len(validation_data)
+            # Try to load with 'all' config first
+            try:
+                test_data = load_dataset(self.hf_dataset_id, "all", split="test")
+                total_len = len(test_data)
+            except:
+                # Fall back to default config
+                test_data = load_dataset(self.hf_dataset_id, split="test")
+                total_len = len(test_data)
         except Exception as e:
             print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
-        leaderboard_detail = "HELM Lite"
+        leaderboard_detail = "HELM Classic"
         
         final_df = pd.DataFrame(
             {
@@ -58,8 +68,14 @@ class WMT14Dataset(Dataset):
                 "leaderboard_detail": [leaderboard_detail],
                 "total_samples": [total_len],
                 "task_categories": [task_categories],
+                # Dynamic metrics fields
+                "downloads": [downloads],
+                "likes": [likes],
+                "last_modified": [last_modified],
+                "trending_score": [trending_score],
             }
         )
         
         self._data = final_df
         return final_df
+
