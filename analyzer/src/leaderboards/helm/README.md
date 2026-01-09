@@ -1,68 +1,56 @@
-# HELM Leaderboard Implementation
+# HELM Classic Leaderboard Implementation
 
-This folder contains the implementation of HELM (Holistic Evaluation of Language Models) benchmark datasets and leaderboard orchestration.
+This folder contains the implementation of HELM Classic (Holistic Evaluation of Language Models - Classic benchmark scenarios) datasets and leaderboard orchestration.
 
 ## Overview
 
-The HELM leaderboard includes datasets from three benchmark categories:
-- **HELM Lite** - Core evaluation datasets
-- **HELM Capabilities** - Advanced capability testing
-- **HELM Finance** - Financial domain evaluation
+The HELM Classic leaderboard includes 9 core evaluation scenarios from the original HELM benchmark:
+- **MMLU** (Massive Multitask Language Understanding)
+- **BoolQ** (Boolean Questions)
+- **NarrativeQA** (Reading comprehension on narratives)
+- **NaturalQuestions** (Closed-book and open-book question answering)
+- **QuAC** (Question Answering in Context)
+- **HellaSwag** (Commonsense reasoning)
+- **OpenBookQA** (Open book question answering)
+- **TruthfulQA** (Truthful question answering)
 
 ## Structure
 
-### Dataset Classes (10 files)
+### Dataset Classes (9 files)
 
 All dataset classes follow the same pattern as HF Open LLM v2, inheriting from the `Dataset` base class:
 
-1. **`banking77.py`** - Banking customer service intent classification
-   - HF Dataset: `mteb/banking77`
-   - Benchmark: HELM Finance
-   - Paper: https://arxiv.org/abs/2003.04807
+1. **`boolq.py`** - Boolean question answering
+   - HF Dataset: `google/boolq`
+   - Paper: https://arxiv.org/abs/1905.10044
 
-2. **`financebench.py`** - Financial question answering benchmark
-   - HF Dataset: `PatronusAI/financebench`
-   - Benchmark: HELM Finance
-   - Paper: https://arxiv.org/abs/2311.11944
+2. **`hellaswag.py`** - Commonsense reasoning
+   - HF Dataset: `Rowan/hellaswag`
+   - Paper: https://arxiv.org/abs/1905.07830
 
-3. **`finqa.py`** - Financial numerical reasoning
-   - HF Dataset: `ibm-research/finqa`
-   - Benchmark: HELM Finance
-   - Note: Marked as missing in metadata extraction but implemented for completeness
+3. **`mmlu.py`** - Massive Multitask Language Understanding
+   - HF Dataset: `cais/mmlu`
+   - Paper: https://arxiv.org/abs/2009.03300
 
-4. **`legalbench.py`** - Legal reasoning and comprehension
-   - HF Dataset: `nguha/legalbench`
-   - Benchmark: HELM Lite
-   - Paper: https://arxiv.org/abs/2308.11462
-
-5. **`med_qa.py`** - Medical question answering
-   - HF Dataset: `bigbio/med_qa`
-   - Benchmark: HELM Lite
-
-6. **`narrativeqa.py`** - Reading comprehension on narratives
+4. **`narrativeqa.py`** - Reading comprehension on narratives
    - HF Dataset: `deepmind/narrativeqa`
-   - Benchmark: HELM Lite
    - Paper: https://arxiv.org/abs/1712.07040
 
-7. **`omni_math.py`** - Olympiad-level mathematics
-   - HF Dataset: `KbsdJames/Omni-MATH`
-   - Benchmark: HELM Capabilities
-   - Paper: https://arxiv.org/abs/2410.07985
-   - Note: Renamed from `omni-math.py` for Python import compatibility
+5. **`naturalquestions.py`** - Natural question answering (closed-book and open-book)
+   - HF Dataset: `google-research-datasets/natural_questions`
+   - Paper: https://arxiv.org/abs/1901.08634
 
-8. **`openbookqa.py`** - Open book question answering
+6. **`openbookqa.py`** - Open book question answering
    - HF Dataset: `allenai/openbookqa`
-   - Benchmark: HELM Lite
+   - Paper: https://arxiv.org/abs/1809.02789
 
-9. **`wildbench.py`** - Real-world challenging tasks
-   - HF Dataset: `allenai/WildBench`
-   - Benchmark: HELM Capabilities
-   - Paper: https://arxiv.org/abs/2406.04770
+7. **`quac.py`** - Question Answering in Context
+   - HF Dataset: `allenai/quac`
+   - Paper: https://arxiv.org/abs/1808.07036
 
-10. **`wmt14.py`** - Machine translation benchmark
-    - HF Dataset: `wmt/wmt14`
-    - Benchmark: HELM Lite
-    - Multiple language pairs: cs-en, de-en, fr-en, hi-en, ru-en
+8. **`truthfulqa.py`** - Truthful question answering
+   - HF Dataset: `domenicrosati/TruthfulQA`
+   - Paper: https://arxiv.org/abs/2109.07958
 
 ### Orchestration Files
 
@@ -119,14 +107,19 @@ The implementation uses existing static metrics from `analyzer/src/metrics/stati
 - **`IsPublicMetric`** - Whether the dataset is publicly available
 - **`LeaderboardDetailMetric`** - Which HELM benchmark the dataset belongs to
 - **`TaskCategoryMetric`** - Task categories/types
+- **`CreatedAtMetric`** - Dataset creation date
 
 ### Dynamic Metrics
-The implementation also tracks time-varying metrics from `analyzer/src/metrics/dynamic/`:
+The implementation tracks time-varying metrics from `analyzer/src/metrics/dynamic/`:
 
 - **`DatasetDownloadsMetric`** - Number of downloads from Hugging Face (tracks popularity)
 - **`DatasetLikesMetric`** - Number of likes/stars (community appreciation)
 - **`DatasetFreshnessMetric`** - Last modification date (dataset maintenance)
 - **`TrendingScoreMetric`** - Trending score (popularity velocity)
+
+**Optional Metrics** (require HELM leaderboard JSONL file):
+- **`TopNModelsMetric`** - Top 5 performing models for each dataset (commented out, ready to enable)
+- **`IsSaturatedMetric`** - Whether the benchmark is saturated (commented out, ready to enable)
 
 See `analyzer/src/metrics/dynamic/HELM_DYNAMIC_METRICS.md` for detailed documentation on dynamic metrics.
 
@@ -162,9 +155,10 @@ Required packages (from `analyzer/requirements.txt`):
 
 ## Implementation Notes
 
-1. **File naming**: `omni-math.py` was renamed to `omni_math.py` because Python module names cannot contain hyphens
+1. **Data source**: Uses `data/all_datasets.json` (shared with hf_openllm_v2) instead of separate HELM metadata file
 2. **Error handling**: All dataset classes include try-except blocks for loading datasets, with fallback to metadata values
-3. **Configuration handling**: Datasets with multiple configurations (e.g., `legalbench`, `openbookqa`, `wmt14`) handle the primary configuration
-4. **Leaderboard categories**: Each dataset is tagged with its HELM category (Lite, Capabilities, or Finance) via the `leaderboard_detail` field
+3. **Configuration handling**: NaturalQuestions has both closed-book and open-book configurations
+4. **CSV export**: Generates `metrics_output_helm_classic.csv` with all metrics (same format as hf_openllm_v2)
+5. **Leaderboard JSONL**: To enable `top_5_models` and `is_saturated` metrics, provide `data/leaderboard_data/helm_data.jsonl` and uncomment lines 211-228 in `run_metrics.py`
 
 
