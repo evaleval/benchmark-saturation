@@ -205,8 +205,8 @@ def run_metrics():
         TrendingScoreMetric(name="trending_score"),
     ]
 
-    # Optional: Add TopNModelsMetric and IsSaturatedMetric if JSONL file exists
-    # Uncomment and update the jsonl_path when you have HELM leaderboard data
+    # Ask Sanchit:  Where to get TopNModelsMetric and IsSaturatedMetric from JSONL file, if it exists
+    # Uncomment and update the jsonl_path below when you have HELM leaderboard data
     # helm_jsonl_path = "data/leaderboard_data/helm_data.jsonl"  # Update this path
     # if Path(helm_jsonl_path).exists():
     #     dynamic_metrics.extend([
