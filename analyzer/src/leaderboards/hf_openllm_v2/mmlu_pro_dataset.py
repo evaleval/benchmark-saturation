@@ -21,6 +21,9 @@ class MMLUProDataset(Dataset):
             all_datasets = json.load(f)
         return all_datasets
 
+    def refresh(self) -> None:
+        pass
+
     def process(self, data: Dict[str, Any]):
         paper_url = self.paper_url
         dataset_url = self.dataset_url
@@ -51,4 +54,5 @@ class MMLUProDataset(Dataset):
                 "task_categories": [task_categories],
             }
         )
+        self._data = final_df
         return final_df

@@ -51,7 +51,7 @@ class UpdatableMetric(Metric):
             target: The dataset or leaderboard to analyze
 
         Returns:
-            float: The current metric score
+            Union[float, str]: The current metric score
         """
         raise NotImplementedError("Subclasses must implement _compute_current")
 

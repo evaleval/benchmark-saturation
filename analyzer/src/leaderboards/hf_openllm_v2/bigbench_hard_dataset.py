@@ -98,7 +98,6 @@ class BigBenchHardDataset(Dataset):
                 "task_categories": [task_categories],
             }
         )
-        print(final_df)
         # Set the processed data
         self._data = final_df
 
