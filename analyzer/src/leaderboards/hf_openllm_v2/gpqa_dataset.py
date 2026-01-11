@@ -2,7 +2,7 @@ from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
 import pandas as pd
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 from datetime import datetime
 
 
@@ -53,7 +53,12 @@ class GPQADataset(Dataset):
 
         total_len = 0
         for config in configs:
-            total_len += len(load_dataset(self.hf_dataset_id, config, split="train"))
+            try:
+                dataset_info = get_dataset_config_info(self.hf_dataset_id, config_name=config)
+                for split_name, split_info in dataset_info.splits.items():
+                    total_len += split_info.num_examples
+            except Exception as e:
+                print(f"Warning: Could not get dataset info for {config}: {e}")
         leaderboard_detail = "HF Open LLM v2"
 
         final_df = pd.DataFrame(

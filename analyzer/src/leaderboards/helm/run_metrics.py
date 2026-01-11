@@ -172,18 +172,19 @@ def run_metrics():
     print(f"\n=== Processing Summary ===")
     print(f"Successfully processed: {processed_count}/{len(datasets_list)} datasets")
 
-    # Map HELM dataset names to evaluation names in JSONL (if available)
-    # Update this map based on your actual HELM leaderboard data structure
+    # Map HELM dataset names to evaluation names in JSONL
+    # Keys MUST match the dataset.name (lowercase identifiers from dataset objects)
+    # Values MUST match the evaluation_name in helm_classic_data.jsonl
     dataset_to_eval_map = {
-        "boolq": "BoolQ",
-        "hellaswag": "HellaSwag",
-        "mmlu": "MMLU",
-        "narrativeqa": "NarrativeQA",
-        "naturalquestions_closed": "NaturalQuestions (closed-book)",
-        "naturalquestions_open": "NaturalQuestions (open-book)",
-        "openbookqa": "OpenBookQA",
-        "quac": "QuAC",
-        "truthfulqa": "TruthfulQA",
+        "boolq": "BoolQ - EM",
+        "hellaswag": "HellaSwag - EM",
+        "mmlu": "MMLU - EM",
+        "narrativeqa": "NarrativeQA - F1",
+        "naturalquestions_closed": "NaturalQuestions (closed-book) - F1",
+        "naturalquestions_open": "NaturalQuestions (open-book) - F1",
+        "openbookqa": "OpenbookQA - EM",
+        "quac": "QuAC - F1",
+        "truthfulqa": "TruthfulQA - EM",
     }
 
     # Define static metrics to run
@@ -203,29 +204,22 @@ def run_metrics():
         DatasetLikesMetric(name="dataset_likes"),
         DatasetFreshnessMetric(name="dataset_freshness"),
         TrendingScoreMetric(name="trending_score"),
+        TopNModelsMetric(
+            name="top_5_models",
+            top_n=5,
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
+            dataset_to_eval_map=dataset_to_eval_map,
+        ),
+        IsSaturatedMetric(
+            name="is_saturated",
+            top_n=5,
+            score_variance_threshold=1.0,
+            min_mean_performance=95.0,
+            noise_ceiling=97.0,
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
+            dataset_to_eval_map=dataset_to_eval_map,
+        ),
     ]
-
-    # Ask Sanchit:  Where to get TopNModelsMetric and IsSaturatedMetric from JSONL file, if it exists
-    # Uncomment and update the jsonl_path below when you have HELM leaderboard data
-    # helm_jsonl_path = "data/leaderboard_data/helm_data.jsonl"  # Update this path
-    # if Path(helm_jsonl_path).exists():
-    #     dynamic_metrics.extend([
-    #         TopNModelsMetric(
-    #             name="top_5_models",
-    #             top_n=5,
-    #             jsonl_path=helm_jsonl_path,
-    #             dataset_to_eval_map=dataset_to_eval_map,
-    #         ),
-    #         IsSaturatedMetric(
-    #             name="is_saturated",
-    #             top_n=5,
-    #             score_variance_threshold=1.0,
-    #             min_mean_performance=95.0,
-    #             noise_ceiling=97.0,
-    #             jsonl_path=helm_jsonl_path,
-    #             dataset_to_eval_map=dataset_to_eval_map,
-    #         ),
-    #     ])
 
     # Run all metrics on the leaderboard
     all_metric_results = {}
@@ -276,7 +270,7 @@ def run_metrics():
             print(f"{metric_name}: {type(metric_result)} - {metric_result}")
 
     # Export to CSV using pandas
-    export_to_csv_pandas(all_metric_results, "metrics_output_helm_classic.csv")
+    export_to_csv_pandas(all_metric_results, "metrics_output_helm_classic_updated.csv")
 
     return all_metric_results
 

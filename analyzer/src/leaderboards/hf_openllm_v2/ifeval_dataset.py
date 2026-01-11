@@ -1,6 +1,6 @@
 from analyzer.src.metrics.base import Dataset
 import json
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 import pandas as pd
 
 
@@ -36,7 +36,16 @@ class IFEvalDataset(Dataset):
 
         task_categories = data.get("task_categories")
         data_created = data.get("createdAt")
-        data_len = len(load_dataset(self.hf_dataset_id, split="train"))
+        
+        # Get dataset info without downloading
+        try:
+            dataset_info = get_dataset_config_info(self.hf_dataset_id)
+            data_len = 0
+            for split_name, split_info in dataset_info.splits.items():
+                data_len += split_info.num_examples
+        except Exception as e:
+            print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
+            data_len = 0
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
             {

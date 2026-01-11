@@ -2,7 +2,7 @@ from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
 import pandas as pd
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 
 
 class OpenBookQADataset(Dataset):
@@ -34,14 +34,16 @@ class OpenBookQADataset(Dataset):
         data_created = data.get("createdAt")
         task_categories = data.get("task_categories", [])
         
-        # Load dataset to get total samples - OpenBookQA has 'main' and 'additional' configs
+        # Get dataset info without downloading - OpenBookQA has 'main' and 'additional' configs
         try:
-            train_data = load_dataset(self.hf_dataset_id, "main", split="train")
-            test_data = load_dataset(self.hf_dataset_id, "main", split="test")
-            validation_data = load_dataset(self.hf_dataset_id, "main", split="validation")
-            total_len = len(train_data) + len(test_data) + len(validation_data)
+            dataset_info = get_dataset_config_info(self.hf_dataset_id, config_name="main")
+            
+            # Get split sizes from metadata
+            total_len = 0
+            for split_name, split_info in dataset_info.splits.items():
+                total_len += split_info.num_examples
         except Exception as e:
-            print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
+            print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
         leaderboard_detail = "HELM Lite"

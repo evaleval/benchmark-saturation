@@ -2,7 +2,7 @@ from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
 import pandas as pd
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 
 
 class NaturalQuestionsDataset(Dataset):
@@ -41,21 +41,18 @@ class NaturalQuestionsDataset(Dataset):
         last_modified = data.get("last_modified", "")
         trending_score = data.get("trending_score", 0.0)
         
-        # Load dataset to get total samples
+        # Get dataset info without downloading
         # NaturalQuestions has different configs for closed-book vs open-book
         try:
-            if self.config == "default":
-                # Closed-book: default config
-                train_data = load_dataset(self.hf_dataset_id, split="train")
-                validation_data = load_dataset(self.hf_dataset_id, split="validation")
-                total_len = len(train_data) + len(validation_data)
-            else:
-                # Open-book: use specified config
-                train_data = load_dataset(self.hf_dataset_id, self.config, split="train")
-                validation_data = load_dataset(self.hf_dataset_id, self.config, split="validation")
-                total_len = len(train_data) + len(validation_data)
+            config_name = None if self.config == "default" else self.config
+            dataset_info = get_dataset_config_info(self.hf_dataset_id, config_name=config_name)
+            
+            # Get split sizes from metadata
+            total_len = 0
+            for split_name, split_info in dataset_info.splits.items():
+                total_len += split_info.num_examples
         except Exception as e:
-            print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
+            print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
         leaderboard_detail = "HELM Classic"

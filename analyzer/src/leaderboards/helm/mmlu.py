@@ -2,7 +2,7 @@ from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
 import pandas as pd
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 
 
 class MMLUDataset(Dataset):
@@ -40,19 +40,22 @@ class MMLUDataset(Dataset):
         last_modified = data.get("last_modified", "")
         trending_score = data.get("trending_score", 0.0)
         
-        # Load dataset to get total samples
+        # Get dataset info without downloading
         # MMLU has multiple subjects, we'll try to get the 'all' config or default
         try:
-            # Try to load with 'all' config first
+            # Try with 'all' config first
             try:
-                test_data = load_dataset(self.hf_dataset_id, "all", split="test")
-                total_len = len(test_data)
+                dataset_info = get_dataset_config_info(self.hf_dataset_id, config_name="all")
             except:
                 # Fall back to default config
-                test_data = load_dataset(self.hf_dataset_id, split="test")
-                total_len = len(test_data)
+                dataset_info = get_dataset_config_info(self.hf_dataset_id)
+            
+            # Get split sizes from metadata
+            total_len = 0
+            for split_name, split_info in dataset_info.splits.items():
+                total_len += split_info.num_examples
         except Exception as e:
-            print(f"Warning: Could not load dataset {self.hf_dataset_id}: {e}")
+            print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)
         
         leaderboard_detail = "HELM Classic"

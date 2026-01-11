@@ -2,7 +2,7 @@ from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
 import pandas as pd
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 
 
 class MMLUProDataset(Dataset):
@@ -36,9 +36,16 @@ class MMLUProDataset(Dataset):
             modality = "text"
         data_created = data.get("createdAt")
         task_categories = data.get("task_categories")
-        data_len_test = len(load_dataset(self.hf_dataset_id, split="test"))
-        data_len_validation = len(load_dataset(self.hf_dataset_id, split="validation"))
-        data_len = data_len_test + data_len_validation
+        
+        # Get dataset info without downloading
+        try:
+            dataset_info = get_dataset_config_info(self.hf_dataset_id)
+            data_len = 0
+            for split_name, split_info in dataset_info.splits.items():
+                data_len += split_info.num_examples
+        except Exception as e:
+            print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
+            data_len = 0
 
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
