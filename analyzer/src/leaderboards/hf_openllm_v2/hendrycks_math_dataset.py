@@ -50,8 +50,19 @@ class HendrycksMathDataset(Dataset):
         for config in configs:
             try:
                 dataset_info = get_dataset_config_info(self.hf_dataset_id, config_name=config)
-                for split_name, split_info in dataset_info.splits.items():
-                    data_len += split_info.num_examples
+                # If there's only 1 split, use that regardless of name
+                if len(dataset_info.splits) == 1:
+                    split_name = list(dataset_info.splits.keys())[0]
+                    data_len += dataset_info.splits[split_name].num_examples
+                else:
+                    # Only count test or validation splits (prioritize test > validation/valid)
+                    if "test" in dataset_info.splits:
+                        data_len += dataset_info.splits["test"].num_examples
+                    elif "validation" in dataset_info.splits:
+                        data_len += dataset_info.splits["validation"].num_examples
+                    elif "valid" in dataset_info.splits:
+                        data_len += dataset_info.splits["valid"].num_examples
+                    # If only train exists, add 0 (skip it)
             except Exception as e:
                 print(f"Warning: Could not get dataset info for {config}: {e}")
         leaderboard_detail = "HF Open LLM v2"

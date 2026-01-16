@@ -38,10 +38,21 @@ class NarrativeQADataset(Dataset):
         try:
             dataset_info = get_dataset_config_info(self.hf_dataset_id)
             
-            # Get split sizes from metadata
-            total_len = 0
-            for split_name, split_info in dataset_info.splits.items():
-                total_len += split_info.num_examples
+            # If there's only 1 split, use that regardless of name
+            if len(dataset_info.splits) == 1:
+                split_name = list(dataset_info.splits.keys())[0]
+                total_len = dataset_info.splits[split_name].num_examples
+            else:
+                # Only count test or validation splits (prioritize test > validation/valid)
+                total_len = 0
+                if "test" in dataset_info.splits:
+                    total_len = dataset_info.splits["test"].num_examples
+                elif "validation" in dataset_info.splits:
+                    total_len = dataset_info.splits["validation"].num_examples
+                elif "valid" in dataset_info.splits:
+                    total_len = dataset_info.splits["valid"].num_examples
+                else:
+                    total_len = 0
         except Exception as e:
             print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
             total_len = data.get("total_samples", 0)

@@ -48,10 +48,25 @@ class MUSRDataset(Dataset):
             try:
                 # Note: MUSR uses config names as split names
                 dataset_info = get_dataset_config_info(self.hf_dataset_id)
-                if config in dataset_info.splits:
+                # If there's only 1 split, use that regardless of name
+                if len(dataset_info.splits) == 1:
+                    split_name = list(dataset_info.splits.keys())[0]
+                    total_len += dataset_info.splits[split_name].num_examples
+                # For MUSR, the configs are actually split names
+                # Only count test or validation splits (prioritize test > validation/valid)
+                elif "test" in dataset_info.splits:
+                    total_len += dataset_info.splits["test"].num_examples
+                elif "validation" in dataset_info.splits:
+                    total_len += dataset_info.splits["validation"].num_examples
+                elif "valid" in dataset_info.splits:
+                    total_len += dataset_info.splits["valid"].num_examples
+                # If config is in splits, it might be the test/validation split
+                elif config in dataset_info.splits:
                     total_len += dataset_info.splits[config].num_examples
+                break  # MUSR has only one dataset_info, don't repeat for each config
             except Exception as e:
                 print(f"Warning: Could not get dataset info for {config}: {e}")
+                break
 
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
