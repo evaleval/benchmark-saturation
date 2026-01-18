@@ -20,8 +20,8 @@ class TemporalSaturationMetric(UpdatableMetric):
     
     For each benchmark evaluation, this metric:
     1. Orders models chronologically by submission date
-    2. Creates sliding windows of 5 consecutive models
-    3. Computes saturation metrics for each window
+    2. Creates sliding windows of N consecutive models
+    3. Computes saturation metrics for each window using top-N models until that time
     4. Tracks saturation evolution over time
     5. Persists trajectory data to JSON files
     """
@@ -33,6 +33,7 @@ class TemporalSaturationMetric(UpdatableMetric):
         jsonl_path: str = "",
         dataset_to_eval_map: Dict[str, str] = None,
         output_dir: str = "results/saturation_trajectories",
+        top_n: int = 5,
         alpha: float = 0.5,
         z: float = 1.96,
         sampling_interval: int = 10,
@@ -46,6 +47,7 @@ class TemporalSaturationMetric(UpdatableMetric):
             jsonl_path: Path to leaderboard JSONL file
             dataset_to_eval_map: Mapping from dataset names to evaluation names
             output_dir: Directory to save trajectory JSON files
+            top_n: Number of top models to analyze (default 5)
             alpha: Exponent for effective sample size (default 0.5)
             z: Standard normal quantile for confidence (default 1.96 for 95%)
             sampling_interval: Store every Nth window (default 10)
@@ -54,6 +56,7 @@ class TemporalSaturationMetric(UpdatableMetric):
         self.jsonl_path = jsonl_path
         self.dataset_to_eval_map = dataset_to_eval_map or {}
         self.output_dir = output_dir
+        self.top_n = top_n
         self.alpha = alpha
         self.z = z
         self.sampling_interval = sampling_interval
@@ -130,43 +133,68 @@ class TemporalSaturationMetric(UpdatableMetric):
         self,
         valid_models: List[dict],
         test_set_size: int,
-    ) -> List[dict]:
+    ) -> tuple[List[dict], Optional[str]]:
         """
-        Compute saturation metrics for sliding windows of 5 models.
+        Compute saturation metrics for sliding windows using cumulative top-N models.
+        
+        For each sliding window of N consecutive submissions, compute S_index using
+        the top-N models submitted until that time point.
         
         Args:
-            valid_models: List of models sorted by submission date
+            valid_models: List of models sorted by submission date (earliest first)
             test_set_size: Size of the test set for this evaluation
         
         Returns:
-            List of window result dictionaries (sampled according to sampling_interval)
+            Tuple of (trajectory, time_to_saturation):
+            - trajectory: List of window result dictionaries (sampled according to sampling_interval)
+            - time_to_saturation: Date when S_index >= 0.7 first occurred, or None
         """
         trajectory = []
+        time_to_saturation = None
         num_models = len(valid_models)
 
-        if num_models < 5:
-            return trajectory
+        if num_models < self.top_n:
+            return trajectory, time_to_saturation
 
-        # Create sliding windows (overlapping groups of 5)
-        for window_idx in range(num_models - 4):
-            window_models = valid_models[window_idx : window_idx + 5]
-            scores = [m["score"] for m in window_models]
+        # Create sliding windows (overlapping groups of top_n)
+        for window_idx in range(num_models - self.top_n + 1):
+            # Window end is at position window_idx + top_n - 1
+            window_end_idx = window_idx + self.top_n - 1
+            
+            # Get the N consecutive submissions in this window
+            window_models = valid_models[window_idx : window_idx + self.top_n]
+            
+            # Get ALL models submitted until this time point (from 0 to window_end_idx)
+            models_until_now = valid_models[: window_end_idx + 1]
+            
+            # Extract scores and sort to get top-N performers
+            all_scores_until_now = [m["score"] for m in models_until_now]
+            all_scores_until_now.sort(reverse=True)
+            
+            # Take top-N scores
+            top_n_scores = all_scores_until_now[:self.top_n]
 
-            # Compute saturation metrics for this window
+            # Compute saturation metrics for these top-N models
             metrics = compute_saturation_metrics(
-                scores=scores,
+                scores=top_n_scores,
                 test_set_size=test_set_size,
                 alpha=self.alpha,
                 z=self.z,
             )
+            
+            # Check for time-to-saturation (S_index >= 0.7 for the first time)
+            if time_to_saturation is None and metrics["s_index"] >= 0.7:
+                time_to_saturation = window_models[-1]["submission_date"]
 
             # Store only every Nth window (for memory efficiency)
-            if window_idx % self.sampling_interval == 0 or window_idx == num_models - 5:
+            if window_idx % self.sampling_interval == 0 or window_idx == num_models - self.top_n:
                 window_result = {
                     "window_index": window_idx,
                     "window_start_date": window_models[0]["submission_date"],
                     "window_end_date": window_models[-1]["submission_date"],
-                    "scores": scores,
+                    "num_models_until_now": len(models_until_now),
+                    "top_n": self.top_n,
+                    "top_n_scores": top_n_scores,
                     "mean_score": metrics["mean_score"],
                     "s1": metrics["s1"],
                     "s5": metrics["s5"],
@@ -181,7 +209,7 @@ class TemporalSaturationMetric(UpdatableMetric):
                 }
                 trajectory.append(window_result)
 
-        return trajectory
+        return trajectory, time_to_saturation
 
     def _persist_trajectory(
         self,
@@ -190,6 +218,7 @@ class TemporalSaturationMetric(UpdatableMetric):
         total_windows: int,
         num_skipped_models: int,
         skipped_model_ids: List[str],
+        time_to_saturation: Optional[str],
     ) -> str:
         """
         Save trajectory data to a JSON file.
@@ -200,6 +229,7 @@ class TemporalSaturationMetric(UpdatableMetric):
             total_windows: Total number of windows computed
             num_skipped_models: Number of models without submission dates
             skipped_model_ids: IDs of skipped models
+            time_to_saturation: Date when S_index >= 0.7 first occurred, or None
         
         Returns:
             Path to the saved JSON file
@@ -214,10 +244,13 @@ class TemporalSaturationMetric(UpdatableMetric):
                 "total_windows": total_windows,
                 "sampled_windows": len(trajectory),
                 "sampling_interval": self.sampling_interval,
+                "top_n": self.top_n,
                 "alpha": self.alpha,
                 "z": self.z,
                 "num_skipped_models": num_skipped_models,
                 "skipped_model_ids": skipped_model_ids,
+                "time_to_saturation": time_to_saturation,
+                "saturation_threshold": 0.7,
                 "generated_at": datetime.now().isoformat(),
             },
             "trajectory": trajectory,
@@ -268,10 +301,10 @@ class TemporalSaturationMetric(UpdatableMetric):
         valid_models, skipped_model_ids = self._extract_models_with_dates(eval_name)
 
         # Check if we have enough models
-        if len(valid_models) < 5:
+        if len(valid_models) < self.top_n:
             return {
                 "status": "insufficient_data",
-                "message": f"Need at least 5 models with submission dates, found {len(valid_models)}",
+                "message": f"Need at least {self.top_n} models with submission dates, found {len(valid_models)}",
                 "num_valid_models": len(valid_models),
                 "num_skipped_models": len(skipped_model_ids),
                 "S_index": None,
@@ -279,10 +312,10 @@ class TemporalSaturationMetric(UpdatableMetric):
             }
 
         # Compute sliding windows
-        trajectory = self._compute_sliding_windows(valid_models, test_set_size)
+        trajectory, time_to_saturation = self._compute_sliding_windows(valid_models, test_set_size)
 
         # Calculate total windows
-        total_windows = len(valid_models) - 4
+        total_windows = len(valid_models) - self.top_n + 1
 
         # Persist trajectory to JSON
         trajectory_file = self._persist_trajectory(
@@ -291,6 +324,7 @@ class TemporalSaturationMetric(UpdatableMetric):
             total_windows=total_windows,
             num_skipped_models=len(skipped_model_ids),
             skipped_model_ids=skipped_model_ids,
+            time_to_saturation=time_to_saturation,
         )
 
         # Return summary metrics (latest window)
@@ -312,6 +346,7 @@ class TemporalSaturationMetric(UpdatableMetric):
                 "num_valid_models": len(valid_models),
                 "date_range_covered": f"{valid_models[0]['submission_date']} to {valid_models[-1]['submission_date']}",
                 "latest_submission_date": latest_window["window_end_date"],
+                "time_to_saturation": time_to_saturation,
                 "test_set_size": test_set_size,
                 "n_eff": latest_window["n_eff"],
                 "trajectory_file_path": trajectory_file,

@@ -9,6 +9,7 @@ from analyzer.src.metrics.dynamic.top_n_models_metric import TopNModelsMetric
 from analyzer.src.metrics.dynamic.is_saturated_metric import IsSaturatedMetric
 from analyzer.src.metrics.dynamic.citation_metric import CitationMetric
 from analyzer.src.metrics.dynamic.temporal_saturation_metric import TemporalSaturationMetric
+from analyzer.src.metrics.dynamic.saturation_index_metric import SaturationIndexMetric
 from analyzer.src.metrics.static.leaderboard_detail_metric import (
     LeaderboardDetailMetric,
 )
@@ -138,12 +139,22 @@ def run_metrics():
             jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data.jsonl",  # Update this path
             dataset_to_eval_map=dataset_to_eval_map,
         ),
+        SaturationIndexMetric(
+            name="saturation_index",
+            description="Statistical saturation index for top 5 models",
+            top_n=5,
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_updated.jsonl",
+            dataset_to_eval_map=dataset_to_eval_map,
+            alpha=0.5,
+            z=1.96,
+        ),
         TemporalSaturationMetric(
             name="temporal_saturation",
             description="Time-aware saturation metric using sliding windows",
             jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_updated.jsonl",
             dataset_to_eval_map=dataset_to_eval_map,
             output_dir="/Users/random/benchmark-saturation/results/saturation_trajectories",
+            top_n=5,
             alpha=0.5,
             z=1.96,
             sampling_interval=10,

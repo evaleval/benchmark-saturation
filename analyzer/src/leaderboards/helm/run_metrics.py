@@ -19,6 +19,7 @@ from analyzer.src.metrics.dynamic.dataset_likes_metric import DatasetLikesMetric
 from analyzer.src.metrics.dynamic.dataset_freshness_metric import DatasetFreshnessMetric
 from analyzer.src.metrics.dynamic.trending_score_metric import TrendingScoreMetric
 from analyzer.src.metrics.dynamic.top_n_models_metric import TopNModelsMetric
+from analyzer.src.metrics.dynamic.saturation_index_metric import SaturationIndexMetric
 from analyzer.src.metrics.dynamic.is_saturated_metric import IsSaturatedMetric
 
 from analyzer.src.leaderboards.helm.boolq import BoolQDataset
@@ -218,6 +219,15 @@ def run_metrics():
             noise_ceiling=97.0,
             jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
             dataset_to_eval_map=dataset_to_eval_map,
+        ),
+        SaturationIndexMetric(
+            name="saturation_index",
+            description="Statistical saturation index for top 5 models",
+            top_n=5,
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
+            dataset_to_eval_map=dataset_to_eval_map,
+            alpha=0.5,
+            z=1.96,
         ),
     ]
 
