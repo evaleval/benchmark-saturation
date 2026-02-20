@@ -1,0 +1,10 @@
+dataset,total_len_dataset,modality,language,is_public,leaderboard_detail,task_categories,created_at,dataset_downloads,dataset_likes,dataset_freshness,trending_score
+boolq,12697,text,en,True,HELM Classic,"[""text-classification""]",2022-03-02T23:29:22Z,41925.0,75.0,717.0,0.0
+hellaswag,49947,text,en,True,HELM Classic,[],2022-03-02T23:29:22Z,360409.0,118.0,833.0,0.0
+mmlu,14042,text,en,True,HELM Classic,"[""question-answering""]",2022-03-02T23:29:22Z,134929.0,456.0,671.0,0.0
+narrativeqa,46765,text,en,True,HELM Lite,"[""text2text-generation""]",2022-03-02T23:29:22Z,0.0,0.0,-1.0,0.0
+naturalquestions_closed,0,text,en,True,HELM Classic,"[""question-answering""]",2022-03-02T23:29:22Z,6702.0,97.0,668.0,0.0
+naturalquestions_open,0,text,en,True,HELM Classic,"[""question-answering""]",2022-03-02T23:29:22Z,6702.0,97.0,668.0,0.0
+openbookqa,5957,"[""tabular"", ""text""]",en,True,HELM Lite,"[""question-answering""]",2022-03-02T23:29:22Z,0.0,0.0,-1.0,0.0
+quac,0,,en,True,HELM Classic,"[""question-answering"", ""text-generation"", ""fill-mask""]",2022-03-02T23:29:22Z,575.0,30.0,721.0,1.0
+truthfulqa,0,text,en,True,HELM Classic,"[""question-answering""]",2022-05-12T00:38:33Z,1250.0,12.0,1287.0,1.0

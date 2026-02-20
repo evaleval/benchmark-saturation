@@ -6,7 +6,7 @@ import os
 
 os.makedirs("../web/figures", exist_ok=True)
 
-plt.rcParams.update({'font.family': 'serif'})
+plt.rcParams.update({"font.family": "serif"})
 
 
 xtickslabels = ["2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
@@ -44,7 +44,12 @@ for human_line in ["hum", "nohum"]:
             plt.plot(
                 xtickslabels,
                 ys,
-                label=task.replace("_", " ").title() + (r" $\bf{is\,solved}$" if ys[-1] >= 1.0 else r" $\bf{is\,not\,solved}$"),
+                label=task.replace("_", " ").title()
+                + (
+                    r" $\bf{is\,solved}$"
+                    if ys[-1] >= 1.0
+                    else r" $\bf{is\,not\,solved}$"
+                ),
                 marker="o",
             )
 
@@ -63,7 +68,9 @@ for human_line in ["hum", "nohum"]:
 
         plt.gca().spines[["top", "right"]].set_visible(False)
         plt.tight_layout(pad=1)
-        plt.savefig(f"../web/figures/mock_performance_{mode}_{human_line}.svg", transparent=True)
+        plt.savefig(
+            f"../web/figures/mock_performance_{mode}_{human_line}.svg", transparent=True
+        )
 
 # %%
 
@@ -115,8 +122,8 @@ plt.figure(figsize=(9, 3))
 for dataset, ys in performance.items():
     ys += np.random.normal(0, 0.05, len(ys))
     plt.plot(
-        xtickslabels[start_i[dataset]:],
-        ys[start_i[dataset]:],
+        xtickslabels[start_i[dataset] :],
+        ys[start_i[dataset] :],
         label=dataset.replace("_", " ").title(),
         marker="o",
     )
