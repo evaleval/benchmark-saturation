@@ -1,4 +1,11 @@
+import sys
+from pathlib import Path
 import pandas as pd
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
 from analyzer.src.metrics.static.modality_detail_metric import ModalityMetric
 from analyzer.src.metrics.static.is_public_metric import IsPublicMetric
 from analyzer.src.metrics.static.language_metric import LanguageMetric
@@ -116,6 +123,11 @@ def run_metrics():
         "hendrycks_math": "MATH Level 5",
     }
 
+    # Construct paths relative to project root
+    jsonl_path_with_dates = str(project_root / "data" / "leaderboard_data" / "hfopenllm_v2_data_with_dates.jsonl")
+    jsonl_path_updated = str(project_root / "data" / "leaderboard_data" / "hfopenllm_v2_data_updated.jsonl")
+    output_dir = str(project_root / "results" / "saturation_trajectories")
+
     all_metrics = [
         TotalLenDatasetMetric(name="total_len_dataset"),
         ModalityMetric(name="modality"),
@@ -127,7 +139,7 @@ def run_metrics():
         TopNModelsMetric(
             name="top_5_models",
             top_n=5,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_with_dates.jsonl",
+            jsonl_path=jsonl_path_with_dates,
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         IsSaturatedMetric(
@@ -136,14 +148,14 @@ def run_metrics():
             score_variance_threshold=1.0,
             min_mean_performance=95.0,
             noise_ceiling=97.0,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_with_dates.jsonl",
+            jsonl_path=jsonl_path_with_dates,
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         SaturationIndexMetric(
             name="saturation_index",
             description="Statistical saturation index for top 5 models",
             top_n=5,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_with_dates.jsonl",
+            jsonl_path=jsonl_path_with_dates,
             dataset_to_eval_map=dataset_to_eval_map,
             alpha=0.5,
             z=1.96,
@@ -151,9 +163,9 @@ def run_metrics():
         TemporalSaturationMetric(
             name="temporal_saturation",
             description="Time-aware saturation metric using sliding windows",
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_updated.jsonl",
+            jsonl_path=jsonl_path_updated,
             dataset_to_eval_map=dataset_to_eval_map,
-            output_dir="/Users/random/benchmark-saturation/results/saturation_trajectories",
+            output_dir=output_dir,
             top_n=5,
             alpha=0.5,
             z=1.96,

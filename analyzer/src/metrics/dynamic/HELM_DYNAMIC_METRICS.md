@@ -138,7 +138,7 @@ print(f"Download history: {history}")
 To run both static and dynamic metrics on all HELM datasets:
 
 ```bash
-cd /Users/srishtiy/dev/benchmark-saturation
+cd <project-root>
 python3 -m analyzer.src.leaderboards.helm.run_metrics
 ```
 

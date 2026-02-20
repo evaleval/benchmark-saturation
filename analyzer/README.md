@@ -8,6 +8,112 @@ A series of metrics, implemented in python, which transform an input csv of Lead
 
 For now, we are implementing these metrics to be individually run manually, but we will eventually transition to an automated pipeline.
 
+## Quick Start
+
+### Installation
+
+1. **Navigate to the project root**:
+   ```bash
+   cd /path/to/benchmark-saturation
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r analyzer/requirements.txt
+   ```
+
+### Running Experiments
+
+#### HELM Classic Leaderboard
+
+Analyze HELM Classic datasets (BoolQ, HellaSwag, MMLU, NarrativeQA, NaturalQuestions, OpenBookQA, QuAC, TruthfulQA):
+
+```bash
+python3 -m analyzer.src.leaderboards.helm.run_metrics
+```
+
+**Output**: `metrics_output_helm_classic.csv`
+
+#### HuggingFace Open LLM v2 Leaderboard
+
+Analyze HF Open LLM v2 datasets (BBH, GPQA, MMLU-PRO, MUSR, IFEval, MATH):
+
+```bash
+python3 -m analyzer.src.leaderboards.hf_openllm_v2.run_metrics
+```
+
+**Outputs**:
+- `metrics_output_hf_llm_v2.csv` - Metric results
+- `results/saturation_trajectories/*.json` - Temporal saturation data
+
+### Understanding the Outputs
+
+#### Metrics Computed
+
+**Static Metrics**:
+- `total_len_dataset` - Number of examples in the dataset
+- `modality` - Text, image, tabular, audio, etc.
+- `language` - Primary language(s)
+- `task_categories` - Question answering, classification, etc.
+- `created_at` - Dataset publication date
+- `is_public` - Whether the dataset is publicly accessible
+- `leaderboard_detail` - Associated leaderboard information
+
+**Dynamic Metrics**:
+- `top_5_models` - Best performing models with scores and metadata
+- `is_saturated` - Boolean saturation status with reasoning
+- `saturation_index` - Statistical saturation measure (S_index: 0-1)
+  - **Low** (< 0.3): Benchmark still challenging
+  - **Medium** (0.3-0.7): Moderate saturation
+  - **Very High** (> 0.7): Approaching saturation
+- `temporal_saturation` - Time-series saturation analysis with trajectory files
+- `dataset_downloads` - HuggingFace download count
+- `dataset_likes` - HuggingFace likes count
+- `dataset_freshness` - Days since last update
+- `trending_score` - Composite popularity and performance metric
+
+#### Saturation Index Formula
+
+The saturation index (S_index) is calculated as:
+
+```
+S_index = 1 - (R_norm / SE_delta)
+```
+
+Where:
+- `R_norm` = Normalized score range (score range / √n_eff)
+- `SE_delta` = Standard error of the difference between top and 5th model
+- `n_eff` = Effective sample size (test_set_size^alpha, default alpha=0.5)
+
+#### Trajectory Files
+
+Located in `../results/saturation_trajectories/`, these JSON files contain:
+
+```json
+{
+  "metadata": {
+    "evaluation_name": "BBH",
+    "total_windows": 3400,
+    "sampled_windows": 341,
+    "sampling_interval": 10,
+    "top_n": 5,
+    "time_to_saturation": "2024-12-15"
+  },
+  "trajectory": [
+    {
+      "window_index": 0,
+      "window_start_date": "2024-06-08",
+      "window_end_date": "2024-06-15",
+      "S_index": 0.176,
+      "saturation_category": "low",
+      "mean_score": 0.765,
+      "score_range": 0.085,
+      "top_n_scores": [0.827, 0.759, 0.748, 0.747, 0.742]
+    }
+  ]
+}
+```
+
 ## Adding a New Dataset
 
 To add a new dataset to the system, follow these steps:
@@ -292,3 +398,148 @@ The system is built around three main abstract base classes:
 - **`Metric`**: Represents any numerical measurement that can be calculated from a dataset or leaderboard. Metrics can work on individual datasets or across entire leaderboards.
 
 ### Class Hierarchy
+
+```
+Metric (Abstract Base)
+├── StaticMetric (src/metrics/static/base.py)
+│   ├── TotalLenDatasetMetric
+│   ├── ModalityMetric
+│   ├── LanguageMetric
+│   ├── TaskCategoryMetric
+│   ├── IsPublicMetric
+│   ├── LeaderboardDetailMetric
+│   └── CreatedAtMetric
+└── UpdatableMetric (src/metrics/dynamic/base.py)
+    ├── DatasetDownloadsMetric
+    ├── DatasetLikesMetric
+    ├── DatasetFreshnessMetric
+    ├── TrendingScoreMetric
+    ├── TopNModelsMetric
+    ├── IsSaturatedMetric
+    ├── SaturationIndexMetric
+    ├── TemporalSaturationMetric
+    └── CitationMetric
+
+Dataset (Abstract Base)
+├── BoolQDataset
+├── HellaSwagDataset
+├── MMLUDataset
+├── NarrativeQADataset
+├── NaturalQuestionsDataset
+├── OpenBookQADataset
+├── QuACDataset
+├── TruthfulQADataset
+├── BigBenchHardDataset
+├── GPQADataset
+├── MMLUProDataset
+├── MUSRDataset
+├── IFEvalDataset
+└── HendrycksMathDataset
+
+Leaderboard (Abstract Base)
+├── HELMClassicLeaderboard
+└── HFOpenLLMVB2Leaderboard
+```
+
+## Project Structure
+
+```
+analyzer/
+├── src/
+│   ├── __init__.py
+│   ├── leaderboards/          # Leaderboard implementations
+│   │   ├── helm/              # HELM Classic datasets
+│   │   │   ├── benchmark.py   # HELMClassicLeaderboard
+│   │   │   ├── boolq.py
+│   │   │   ├── hellaswag.py
+│   │   │   ├── mmlu.py
+│   │   │   ├── narrativeqa.py
+│   │   │   ├── naturalquestions.py
+│   │   │   ├── openbookqa.py
+│   │   │   ├── quac.py
+│   │   │   ├── truthfulqa.py
+│   │   │   └── run_metrics.py  # Main execution script
+│   │   └── hf_openllm_v2/     # HF Open LLM v2 datasets
+│   │       ├── benchmark.py   # HFOpenLLMVB2Leaderboard
+│   │       ├── bigbench_hard_dataset.py
+│   │       ├── gpqa_dataset.py
+│   │       ├── mmlu_pro_dataset.py
+│   │       ├── musr_dataset.py
+│   │       ├── ifeval_dataset.py
+│   │       ├── hendrycks_math_dataset.py
+│   │       └── run_metrics.py  # Main execution script
+│   ├── metrics/               # Metric implementations
+│   │   ├── base.py            # Base Dataset, Leaderboard, Metric classes
+│   │   ├── csv_processor.py   # CSV export utilities
+│   │   ├── static/            # Static metrics
+│   │   │   ├── base.py
+│   │   │   ├── total_len_dataset_metric.py
+│   │   │   ├── modality_detail_metric.py
+│   │   │   ├── language_metric.py
+│   │   │   ├── task_category_metric.py
+│   │   │   ├── is_public_metric.py
+│   │   │   ├── leaderboard_detail_metric.py
+│   │   │   └── created_at_metric.py
+│   │   └── dynamic/           # Dynamic metrics
+│   │       ├── base.py
+│   │       ├── dataset_downloads_metric.py
+│   │       ├── dataset_likes_metric.py
+│   │       ├── dataset_freshness_metric.py
+│   │       ├── trending_score_metric.py
+│   │       ├── top_n_models_metric.py
+│   │       ├── is_saturated_metric.py
+│   │       ├── saturation_index_metric.py
+│   │       ├── temporal_saturation_metric.py
+│   │       ├── saturation_utils.py
+│   │       └── citation_metric.py
+│   └── processing/            # Data processing utilities
+├── requirements.txt           # Python dependencies
+├── test_example.py           # Example test script
+└── README.md                 # This file
+```
+
+## Dependencies
+
+```txt
+pandas>=1.3.0         # Data manipulation and CSV processing
+datasets==3.2.0       # HuggingFace datasets library
+python-dotenv         # Environment variable management
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Import Errors**: Make sure you're running commands from the project root and the `analyzer` package is in your Python path:
+```bash
+# Run from project root
+python3 -m analyzer.src.leaderboards.helm.run_metrics
+```
+
+**Missing Data Files**: Ensure Git LFS files are pulled:
+```bash
+git lfs pull
+```
+
+**Path Issues**: All paths are now relative to the project root. If you see absolute path references, please report them as they should be fixed.
+
+**Missing Dependencies**: Install all requirements:
+```bash
+pip install -r analyzer/requirements.txt
+```
+
+## Contributing
+
+When adding new features:
+
+1. Use relative paths (via `Path(__file__)` and `project_root` patterns)
+2. Follow the existing metric architecture (inherit from `StaticMetric` or `UpdatableMetric`)
+3. Add docstrings to all classes and methods
+4. Update this README with new metric descriptions
+5. Test with both individual datasets and full leaderboards
+
+## Related Documentation
+
+- Main project README: `../README.md`
+- HELM Dynamic Metrics: `src/metrics/dynamic/HELM_DYNAMIC_METRICS.md`
+- Metric examples: `src/metrics/examples.py`

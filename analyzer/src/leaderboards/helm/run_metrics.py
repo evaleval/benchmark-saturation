@@ -187,7 +187,8 @@ def run_metrics():
         "quac": "QuAC - F1",
         "truthfulqa": "TruthfulQA - EM",
     }
-
+    # Construct paths relative to project root
+    jsonl_path = str(project_root / "data" / "leaderboard_data" / "helm_classic_data.jsonl")
     # Define static metrics to run
     static_metrics = [
         TotalLenDatasetMetric(name="total_len_dataset"),
@@ -208,7 +209,7 @@ def run_metrics():
         TopNModelsMetric(
             name="top_5_models",
             top_n=5,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         IsSaturatedMetric(
@@ -217,14 +218,14 @@ def run_metrics():
             score_variance_threshold=1.0,
             min_mean_performance=95.0,
             noise_ceiling=97.0,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         SaturationIndexMetric(
             name="saturation_index",
             description="Statistical saturation index for top 5 models",
             top_n=5,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
             alpha=0.5,
             z=1.96,

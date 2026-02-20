@@ -11,6 +11,7 @@ from analyzer.src.metrics.dynamic.saturation_utils import compute_saturation_met
 from typing import Dict, List, Union, Optional
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from pathlib import Path
 import json
 import os
 
@@ -264,7 +265,14 @@ class TemporalSaturationMetric(UpdatableMetric):
         with open(filepath, "w") as f:
             json.dump(output_data, f, indent=2)
 
-        return filepath
+        # Convert to relative path for portability
+        try:
+            relative_path = os.path.relpath(filepath, os.getcwd())
+        except (ValueError, TypeError):
+            # If relative path calculation fails, use the original path
+            relative_path = filepath
+
+        return relative_path
 
     def _compute(self, dataset: Dataset) -> Union[Dict, None]:
         """
