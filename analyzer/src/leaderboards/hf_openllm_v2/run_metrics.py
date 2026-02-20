@@ -127,7 +127,7 @@ def run_metrics():
         TopNModelsMetric(
             name="top_5_models",
             top_n=5,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data.jsonl",  # Update this path
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_with_dates.jsonl",
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         IsSaturatedMetric(
@@ -136,14 +136,14 @@ def run_metrics():
             score_variance_threshold=1.0,
             min_mean_performance=95.0,
             noise_ceiling=97.0,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data.jsonl",  # Update this path
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_with_dates.jsonl",
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         SaturationIndexMetric(
             name="saturation_index",
             description="Statistical saturation index for top 5 models",
             top_n=5,
-            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_updated.jsonl",
+            jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/hfopenllm_v2_data_with_dates.jsonl",
             dataset_to_eval_map=dataset_to_eval_map,
             alpha=0.5,
             z=1.96,

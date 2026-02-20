@@ -10,6 +10,7 @@ from analyzer.src.metrics.base import Dataset
 from analyzer.src.metrics.dynamic.saturation_utils import compute_saturation_metrics
 from typing import Dict, List, Union, Optional
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import json
 import os
 
@@ -19,7 +20,7 @@ class TemporalSaturationMetric(UpdatableMetric):
     Metric to track benchmark saturation over time using sliding windows.
     
     For each benchmark evaluation, this metric:
-    1. Orders models chronologically by submission date
+    1. Orders models chronologically by created_at date
     2. Creates sliding windows of N consecutive models
     3. Computes saturation metrics for each window using top-N models until that time
     4. Tracks saturation evolution over time
@@ -76,15 +77,15 @@ class TemporalSaturationMetric(UpdatableMetric):
         self, eval_name: str
     ) -> tuple[List[dict], List[str]]:
         """
-        Extract models for a specific evaluation and separate by submission date availability.
+        Extract models for a specific evaluation and separate by created_at date availability.
         
         Args:
             eval_name: Name of the evaluation to filter by
         
         Returns:
             Tuple of (valid_models, skipped_model_ids)
-            - valid_models: List of dicts with {model_id, score, submission_date, submission_datetime}
-            - skipped_model_ids: List of model IDs without submission dates
+            - valid_models: List of dicts with {model_id, score, created_at, created_at_datetime}
+            - skipped_model_ids: List of model IDs without created_at dates
         """
         model_data = self._load_model_data()
         valid_models = []
