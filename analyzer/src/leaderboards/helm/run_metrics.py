@@ -214,7 +214,7 @@ def run_metrics():
         IsSaturatedMetric(
             name="is_saturated",
             top_n=5,
-        score_variance_threshold=1.0,
+            score_variance_threshold=1.0,
             min_mean_performance=95.0,
             noise_ceiling=97.0,
             jsonl_path="/Users/random/benchmark-saturation/data/leaderboard_data/helm_classic_data.jsonl",
