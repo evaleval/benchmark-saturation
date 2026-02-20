@@ -1,10 +1,11 @@
 from analyzer.src.metrics.base import Dataset
+from typing import Optional, Any, Dict
 import json
-from datasets import get_dataset_config_info
 import pandas as pd
+from datasets import get_dataset_config_info
 
 
-class IFEvalDataset(Dataset):
+class BoolQDataset(Dataset):
     def __init__(
         self, name: str, paper_url: str, dataset_url: str, hf_dataset_id: str, **kwargs
     ):
@@ -15,50 +16,55 @@ class IFEvalDataset(Dataset):
         self.paper_url = paper_url
         self.dataset_url = dataset_url
 
+    def refresh(self) -> None:
+        pass
+
     def download(self):
         with open(self.static_data_path, "r") as f:
             all_datasets = json.load(f)
         return all_datasets
 
-    def refresh(self) -> None:
-        pass
-
-    def process(self, data):
+    def process(self, data: Dict[str, Any]):
         paper_url = self.paper_url
         dataset_url = self.dataset_url
-        language = data.get("language_from_tags")
-        if language is None:
-            language = "en"
+        
+        language = data.get("language_from_tags", "en")
         is_public = True
-        modality = data.get("modality_from_tags")
-        if modality is None:
-            modality = "text"
-
-        task_categories = data.get("task_categories")
+        modality = data.get("modality_from_tags", "text")
         data_created = data.get("createdAt")
+        task_categories = data.get("task_categories", [])
+        
+        # Extract dynamic metric fields
+        downloads = data.get("downloads", 0)
+        likes = data.get("likes", 0)
+        last_modified = data.get("last_modified", "")
+        trending_score = data.get("trending_score", 0.0)
         
         # Get dataset info without downloading
         try:
             dataset_info = get_dataset_config_info(self.hf_dataset_id)
+            
             # If there's only 1 split, use that regardless of name
             if len(dataset_info.splits) == 1:
                 split_name = list(dataset_info.splits.keys())[0]
-                data_len = dataset_info.splits[split_name].num_examples
+                total_len = dataset_info.splits[split_name].num_examples
             else:
                 # Only count test or validation splits (prioritize test > validation/valid)
-                data_len = 0
+                total_len = 0
                 if "test" in dataset_info.splits:
-                    data_len = dataset_info.splits["test"].num_examples
+                    total_len = dataset_info.splits["test"].num_examples
                 elif "validation" in dataset_info.splits:
-                    data_len = dataset_info.splits["validation"].num_examples
+                    total_len = dataset_info.splits["validation"].num_examples
                 elif "valid" in dataset_info.splits:
-                    data_len = dataset_info.splits["valid"].num_examples
+                    total_len = dataset_info.splits["valid"].num_examples
                 else:
-                    data_len = 0
+                    total_len = 0
         except Exception as e:
             print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
-            data_len = 0
-        leaderboard_detail = "HF Open LLM v2"
+            total_len = data.get("total_samples", 0)
+        
+        leaderboard_detail = "HELM Classic"
+        
         final_df = pd.DataFrame(
             {
                 "paper_url": [paper_url],
@@ -68,9 +74,16 @@ class IFEvalDataset(Dataset):
                 "modality": [modality],
                 "data_created": [data_created],
                 "leaderboard_detail": [leaderboard_detail],
-                "total_samples": [data_len],
+                "total_samples": [total_len],
                 "task_categories": [task_categories],
+                # Dynamic metrics fields
+                "downloads": [downloads],
+                "likes": [likes],
+                "last_modified": [last_modified],
+                "trending_score": [trending_score],
             }
         )
+        
         self._data = final_df
         return final_df
+

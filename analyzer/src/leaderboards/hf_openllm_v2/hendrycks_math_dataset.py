@@ -1,9 +1,8 @@
 from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 import pandas as pd
-import json
 
 
 class HendrycksMathDataset(Dataset):
@@ -49,7 +48,23 @@ class HendrycksMathDataset(Dataset):
         ]
         data_len = 0
         for config in configs:
-            data_len += len(load_dataset(self.hf_dataset_id, config))
+            try:
+                dataset_info = get_dataset_config_info(self.hf_dataset_id, config_name=config)
+                # If there's only 1 split, use that regardless of name
+                if len(dataset_info.splits) == 1:
+                    split_name = list(dataset_info.splits.keys())[0]
+                    data_len += dataset_info.splits[split_name].num_examples
+                else:
+                    # Only count test or validation splits (prioritize test > validation/valid)
+                    if "test" in dataset_info.splits:
+                        data_len += dataset_info.splits["test"].num_examples
+                    elif "validation" in dataset_info.splits:
+                        data_len += dataset_info.splits["validation"].num_examples
+                    elif "valid" in dataset_info.splits:
+                        data_len += dataset_info.splits["valid"].num_examples
+                    # If only train exists, add 0 (skip it)
+            except Exception as e:
+                print(f"Warning: Could not get dataset info for {config}: {e}")
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
             {

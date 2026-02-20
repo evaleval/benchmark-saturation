@@ -1,3 +1,4 @@
 /Users/random/benchmark-saturation/data/all_datasets.json filter=lfs diff=lfs merge=lfs -text
 data/all_datasets.json filter=lfs diff=lfs merge=lfs -text
 data/leaderboard_data/hfopenllm_v2_data.jsonl filter=lfs diff=lfs merge=lfs -text
+data/leaderboard_data/helm_classic_data.jsonl filter=lfs diff=lfs merge=lfs -text

@@ -2,7 +2,7 @@ from analyzer.src.metrics.base import Dataset
 from typing import Optional, Any, Dict
 import json
 import pandas as pd
-from datasets import load_dataset
+from datasets import get_dataset_config_info
 
 
 class MMLUProDataset(Dataset):
@@ -36,9 +36,28 @@ class MMLUProDataset(Dataset):
             modality = "text"
         data_created = data.get("createdAt")
         task_categories = data.get("task_categories")
-        data_len_test = len(load_dataset(self.hf_dataset_id, split="test"))
-        data_len_validation = len(load_dataset(self.hf_dataset_id, split="validation"))
-        data_len = data_len_test + data_len_validation
+        
+        # Get dataset info without downloading
+        try:
+            dataset_info = get_dataset_config_info(self.hf_dataset_id)
+            # If there's only 1 split, use that regardless of name
+            if len(dataset_info.splits) == 1:
+                split_name = list(dataset_info.splits.keys())[0]
+                data_len = dataset_info.splits[split_name].num_examples
+            else:
+                # Only count test or validation splits (prioritize test > validation/valid)
+                data_len = 0
+                if "test" in dataset_info.splits:
+                    data_len = dataset_info.splits["test"].num_examples
+                elif "validation" in dataset_info.splits:
+                    data_len = dataset_info.splits["validation"].num_examples
+                elif "valid" in dataset_info.splits:
+                    data_len = dataset_info.splits["valid"].num_examples
+                else:
+                    data_len = 0
+        except Exception as e:
+            print(f"Warning: Could not get dataset info for {self.hf_dataset_id}: {e}")
+            data_len = 0
 
         leaderboard_detail = "HF Open LLM v2"
         final_df = pd.DataFrame(
