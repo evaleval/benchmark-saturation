@@ -228,3 +228,6 @@ website/.next/
 website/out/
 website/.turbo/
 data/all_datasets.json
+
+# Backup files
+*.bak
