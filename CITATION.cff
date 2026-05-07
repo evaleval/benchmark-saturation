@@ -1,0 +1,166 @@
+cff-version: 1.2.0
+message: "If you use this software or the accompanying paper, please cite as follows."
+title: "When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation"
+abstract: "A research framework for systematically characterizing the complexity and saturation dynamics of AI benchmarks over time."
+type: software
+license: MIT
+repository-code: "https://github.com/evaleval/benchmark-saturation"
+authors:
+  - family-names: Akhtar
+    given-names: Mubashara
+  - family-names: Reuel
+    given-names: Anka
+  - family-names: Soni
+    given-names: Prajna
+  - family-names: Ahuja
+    given-names: Sanchit
+  - family-names: Ammanamanchi
+    given-names: Pawan Sasanka
+  - family-names: Rawal
+    given-names: Ruchit
+  - family-names: Zouhar
+    given-names: Vilém
+  - family-names: Yadav
+    given-names: Srishti
+  - family-names: Whitehouse
+    given-names: Chenxi
+  - family-names: Ki
+    given-names: Dayeon
+  - family-names: Mickel
+    given-names: Jennifer
+  - family-names: Choshen
+    given-names: Leshem
+  - family-names: Šuppa
+    given-names: Marek
+  - family-names: Batzner
+    given-names: Jan
+  - family-names: Chim
+    given-names: Jenny
+  - family-names: Sania
+    given-names: Jeba
+  - family-names: Long
+    given-names: Yanan
+  - family-names: Rahmani
+    given-names: Hossein A.
+  - family-names: Knight
+    given-names: Christina
+  - family-names: Nan
+    given-names: Yiyang
+  - family-names: Raj
+    given-names: Jyoutir
+  - family-names: Fan
+    given-names: Yu
+  - family-names: Singh
+    given-names: Shubham
+  - family-names: Sahoo
+    given-names: Subramanyam
+  - family-names: Habba
+    given-names: Eliya
+  - family-names: Gohar
+    given-names: Usman
+  - family-names: Pawar
+    given-names: Siddhesh
+  - family-names: Scholz
+    given-names: Robert
+  - family-names: Subramonian
+    given-names: Arjun
+  - family-names: Ni
+    given-names: Jingwei
+  - family-names: Kochenderfer
+    given-names: Mykel
+  - family-names: Koyejo
+    given-names: Sanmi
+  - family-names: Sachan
+    given-names: Mrinmaya
+  - family-names: Biderman
+    given-names: Stella
+  - family-names: Talat
+    given-names: Zeerak
+  - family-names: Ghosh
+    given-names: Avijit
+  - family-names: Solaiman
+    given-names: Irene
+preferred-citation:
+  type: article
+  title: "When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation"
+  authors:
+    - family-names: Akhtar
+      given-names: Mubashara
+    - family-names: Reuel
+      given-names: Anka
+    - family-names: Soni
+      given-names: Prajna
+    - family-names: Ahuja
+      given-names: Sanchit
+    - family-names: Ammanamanchi
+      given-names: Pawan Sasanka
+    - family-names: Rawal
+      given-names: Ruchit
+    - family-names: Zouhar
+      given-names: Vilém
+    - family-names: Yadav
+      given-names: Srishti
+    - family-names: Whitehouse
+      given-names: Chenxi
+    - family-names: Ki
+      given-names: Dayeon
+    - family-names: Mickel
+      given-names: Jennifer
+    - family-names: Choshen
+      given-names: Leshem
+    - family-names: Šuppa
+      given-names: Marek
+    - family-names: Batzner
+      given-names: Jan
+    - family-names: Chim
+      given-names: Jenny
+    - family-names: Sania
+      given-names: Jeba
+    - family-names: Long
+      given-names: Yanan
+    - family-names: Rahmani
+      given-names: Hossein A.
+    - family-names: Knight
+      given-names: Christina
+    - family-names: Nan
+      given-names: Yiyang
+    - family-names: Raj
+      given-names: Jyoutir
+    - family-names: Fan
+      given-names: Yu
+    - family-names: Singh
+      given-names: Shubham
+    - family-names: Sahoo
+      given-names: Subramanyam
+    - family-names: Habba
+      given-names: Eliya
+    - family-names: Gohar
+      given-names: Usman
+    - family-names: Pawar
+      given-names: Siddhesh
+    - family-names: Scholz
+      given-names: Robert
+    - family-names: Subramonian
+      given-names: Arjun
+    - family-names: Ni
+      given-names: Jingwei
+    - family-names: Kochenderfer
+      given-names: Mykel
+    - family-names: Koyejo
+      given-names: Sanmi
+    - family-names: Sachan
+      given-names: Mrinmaya
+    - family-names: Biderman
+      given-names: Stella
+    - family-names: Talat
+      given-names: Zeerak
+    - family-names: Ghosh
+      given-names: Avijit
+    - family-names: Solaiman
+      given-names: Irene
+  year: 2026
+  url: "https://arxiv.org/abs/2602.16763"
+  identifiers:
+    - type: other
+      value: "arXiv:2602.16763"
+      description: "arXiv preprint"

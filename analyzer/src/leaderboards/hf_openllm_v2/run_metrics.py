@@ -123,9 +123,11 @@ def run_metrics():
         "hendrycks_math": "MATH Level 5",
     }
 
-    # Construct paths relative to project root
-    jsonl_path_with_dates = str(project_root / "data" / "leaderboard_data" / "hfopenllm_v2_data_with_dates.jsonl")
-    jsonl_path_updated = str(project_root / "data" / "leaderboard_data" / "hfopenllm_v2_data_updated.jsonl")
+    # Construct paths relative to project root.
+    # `hfopenllm_v2_data_with_dates.jsonl` is the canonical snapshot: it contains
+    # the same 3,414 records as the older `_updated` and unsuffixed variants but
+    # adds per-record `created_at` / `last_modified` fields used downstream.
+    jsonl_path = str(project_root / "data" / "leaderboard_data" / "hfopenllm_v2_data_with_dates.jsonl")
     output_dir = str(project_root / "results" / "saturation_trajectories")
 
     all_metrics = [
@@ -139,7 +141,7 @@ def run_metrics():
         TopNModelsMetric(
             name="top_5_models",
             top_n=5,
-            jsonl_path=jsonl_path_with_dates,
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         IsSaturatedMetric(
@@ -148,14 +150,14 @@ def run_metrics():
             score_variance_threshold=1.0,
             min_mean_performance=95.0,
             noise_ceiling=97.0,
-            jsonl_path=jsonl_path_with_dates,
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
         ),
         SaturationIndexMetric(
             name="saturation_index",
             description="Statistical saturation index for top 5 models",
             top_n=5,
-            jsonl_path=jsonl_path_with_dates,
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
             alpha=0.5,
             z=1.96,
@@ -163,7 +165,7 @@ def run_metrics():
         TemporalSaturationMetric(
             name="temporal_saturation",
             description="Time-aware saturation metric using sliding windows",
-            jsonl_path=jsonl_path_updated,
+            jsonl_path=jsonl_path,
             dataset_to_eval_map=dataset_to_eval_map,
             output_dir=output_dir,
             top_n=5,
