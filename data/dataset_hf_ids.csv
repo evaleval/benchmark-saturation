@@ -1,0 +1,59 @@
+Dataset_ID,Benchmark,Notes
+OpenSafetyLab/Salad-Data,Salad-Bench,
+google/IFEval,HF Open LLM v2,
+maveriq/bigbenchhard,HF Open LLM v2,
+EleutherAI/hendrycks_math,HF Open LLM v2,
+Idavidrein/gpqa,HF Open LLM v2,
+TAUR-Lab/MuSR,HF Open LLM v2,
+TIGER-Lab/MMLU-Pro,HF Open LLM v2,
+cais/mmlu,HF Open LLM v1,
+allenai/winogrande,HF Open LLM v1,
+Rowan/hellaswag,HF Open LLM v1,
+openai/gsm8k,HF Open LLM v1,
+domenicrosati/TruthfulQA,HF Open LLM v1,
+allenai/reward-bench-2,RewardBench,
+livecodebench/code_generation_lite,LiveCodeBench,
+livecodebench/code_generation,LiveCodeBench,
+livecodebench/submissions,LiveCodeBench,
+livecodebench/execution-v2,LiveCodeBench,
+livecodebench/test_generation,LiveCodeBench,
+anonymous1926/anonymous_dataset,LiveCodeBench Pro,
+N/A,Polyglot,https://github.com/Aider-AI/polyglot-benchmark
+N/A,Refactor,https://github.com/Aider-AI/refactor-benchmark
+arcprize/arc_agi_v1_public_eval,ARC-AGI,
+arcprize/arc_agi_v2_public_eval,ARC-AGI,
+N/A,,
+yale-nlp/SciArena,Ai2 SciArena,
+N/A,,
+N/A,,https://github.com/ShishirPatil/gorilla/tree/main/berkeley-function-call-leaderboard
+pbevan11/EQ-Bench,EQ-Bench 3,
+allenai/WildBench,HELM Capabilities,
+KbsdJames/Omni-MATH,HELM Capabilities,
+deepmind/narrativeqa,HELM Lite,
+N/A,,
+N/A,,
+allenai/openbookqa,HELM Lite,
+nguha/legalbench,HELM Lite,
+bigbio/med_qa,HELM Lite,
+wmt/wmt14,HELM Lite,
+N/A,,https://crfm.stanford.edu/helm/
+N/A,,https://crfm.stanford.edu/helm/
+AIR-Bench/qa_web_en,AIR-Bench,
+N/A,,https://github.com/centerforaisafety/HarmBench/tree/main/data
+Bertievidgen/SimpleSafetyTests,Safety,
+N/A,,
+N/A,,
+Anthropic/hh-rlhf,Safety,
+N/A,,https://crfm.stanford.edu/helm/cleva/latest/
+N/A,,https://crfm.stanford.edu/helm/thaiexam/latest/
+N/A,,https://github.com/aisingapore/SEA-HELM
+Institute-Disease-Modeling/mmlu-winogrande-afr,MMLU-Winogrande-Afr,
+N/A,,https://crfm.stanford.edu/helm/
+ibm-research/finqa,HELM Finance,
+mteb/banking77,HELM Finance,
+PatronusAI/financebench,HELM Finance,
+N/A,,https://crfm.stanford.edu/helm/
+princeton-nlp/SWE-bench,SWE-Bench,
+princeton-nlp/SWE-bench_Verified,SWE-Bench Verified,
+N/A,,
+N/A,,

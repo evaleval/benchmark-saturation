@@ -1,0 +1,1 @@
+Staic metrics are numbers that never change for a benchmark. These include simple aspects like the number of classes or number of data points, and complex attributes such as the average perplexity of its input strings according to some assessment model. They are run at add-time for a benchmark.
