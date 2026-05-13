@@ -92,14 +92,18 @@ def run_metrics():
         config="default",  # closed-book
     )
 
-    # NaturalQuestions open-book (may need different config - adjust based on actual dataset structure)
+    # NaturalQuestions open-book. The HELM open-book vs. closed-book split is a
+    # scenario-level distinction (whether retrieved passages are appended to the
+    # prompt), not a HuggingFace dataset config. Both variants therefore share the
+    # same upstream `default` config; we instantiate them separately so the per-
+    # variant metrics land in their own CSV rows.
     naturalquestions_open_dataset = NaturalQuestionsDataset(
         name="naturalquestions_open",
         paper_url="https://arxiv.org/abs/1901.08634",
         dataset_url="https://huggingface.co/datasets/google-research-datasets/natural_questions",
         hf_dataset_id="google-research-datasets/natural_questions",
         static_data_path="data/all_datasets.json",
-        config="default",  # TODO: Update with correct open-book config name
+        config="default",
     )
 
     openbookqa_dataset = OpenBookQADataset(
